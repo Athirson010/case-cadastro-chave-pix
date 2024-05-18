@@ -1,6 +1,5 @@
 package io.github.athirson010.cadastro_chaves_pix.business;
 
-
 import io.github.athirson010.cadastro_chaves_pix.domains.enums.TipoChaveEnum;
 import io.github.athirson010.cadastro_chaves_pix.domains.requests.CadastroChavePixRequest;
 import io.github.athirson010.cadastro_chaves_pix.domains.responses.CadastroChavePixResponse;
@@ -19,24 +18,12 @@ public class ChavePixBusiness {
     }
 
     private ChavePixValidator resgatarTipoValidacao(TipoChaveEnum tipoChave) {
-        ChavePixValidator retorno = null;
-        switch (tipoChave) {
-            case CELULAR:
-                retorno = new ChavePixValidatorCelular();
-                break;
-            case EMAIL:
-                retorno = new ChavePixValidatorEmail();
-                break;
-            case CPF:
-                retorno = new ChavePixValidatorCPF();
-                break;
-            case CNPJ:
-                retorno = new ChavePixValidatorCPF();
-                break;
-            case ALEATORIA:
-                retorno = new ChavePixValidatorCPF();
-                break;
-        }
-        return retorno;
+        return switch (tipoChave) {
+            case CELULAR -> new ChavePixValidatorCelular();
+            case EMAIL -> new ChavePixValidatorEmail();
+            case CPF -> new ChavePixValidatorCPF();
+            case CNPJ -> new ChavePixValidatorCPF();
+            case ALEATORIA -> new ChavePixValidatorCPF();
+        };
     }
 }
