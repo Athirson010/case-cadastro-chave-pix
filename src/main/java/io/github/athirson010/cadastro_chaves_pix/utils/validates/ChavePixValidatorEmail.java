@@ -4,7 +4,7 @@ import io.github.athirson010.cadastro_chaves_pix.domains.requests.CadastroChaveP
 import io.github.athirson010.cadastro_chaves_pix.utils.ValidacaoRegex;
 
 
-public class ChavePixValidatorEmail implements ChavePixValidator{
+public class ChavePixValidatorEmail implements ChavePixValidator {
     @Override
     public void validarChave(CadastroChavePixRequest request) {
         String regex = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\\.[a-zA-Z]{2,}$";

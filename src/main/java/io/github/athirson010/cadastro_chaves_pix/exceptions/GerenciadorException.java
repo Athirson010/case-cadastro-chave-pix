@@ -1,7 +1,6 @@
 package io.github.athirson010.cadastro_chaves_pix.exceptions;
 
 
-
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -23,6 +22,7 @@ public class GerenciadorException {
     public ResponseEntity<Erro> tratarRequisicaoInvalida(RequisicaoInvalidaException e) {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(new Erro(e.getMessage(), null));
     }
+
     @ExceptionHandler(ValidacaoException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     public ResponseEntity tratarValidacao(ValidacaoException e) {
@@ -32,7 +32,7 @@ public class GerenciadorException {
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     public ResponseEntity tratarValidacaoEnum(HttpMessageNotReadableException e) {
-    return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
     }
 
 }

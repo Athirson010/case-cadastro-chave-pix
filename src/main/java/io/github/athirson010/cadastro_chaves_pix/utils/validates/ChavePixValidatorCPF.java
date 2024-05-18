@@ -9,7 +9,7 @@ public class ChavePixValidatorCPF implements ChavePixValidator {
     public void validarChave(CadastroChavePixRequest request) {
         String regex = "^\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}$";
         ValidacaoRegex.validar(regex, request.getValorChave());
-        if (!ValidacaoCPF.isCPF(request.getValorChave())){
+        if (!ValidacaoCPF.isCPF(request.getValorChave())) {
             throw new RuntimeException("CPF invalido");
         }
     }

@@ -4,13 +4,12 @@ import io.github.athirson010.cadastro_chaves_pix.domains.enums.TipoChaveEnum;
 import io.github.athirson010.cadastro_chaves_pix.domains.enums.TipoContaEnum;
 import io.github.athirson010.cadastro_chaves_pix.domains.enums.TipoPessoaEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
-import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import org.hibernate.validator.constraints.Length;
 
 @Data
-public class CadastroChavePixRequest{
+public class CadastroChavePixRequest {
     @NotNull
     private TipoChaveEnum tipoChave;
     @Length(max = 77)

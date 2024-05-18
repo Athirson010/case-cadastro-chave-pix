@@ -20,7 +20,7 @@ public class ChavesPixController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.OK)
-    public CadastroChavePixResponse cadastrarChavePix(@Valid @RequestBody CadastroChavePixRequest body){
+    public CadastroChavePixResponse cadastrarChavePix(@Valid @RequestBody CadastroChavePixRequest body) {
         return business.criarChaveComConta(body);
     }
 }

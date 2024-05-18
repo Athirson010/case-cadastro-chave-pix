@@ -6,7 +6,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 public class ValidacaoRegex {
-    public static void validar(String regex, String valor){
+    public static void validar(String regex, String valor) {
         Pattern pattern = Pattern.compile(regex);
         Matcher matcher = pattern.matcher(valor);
 
