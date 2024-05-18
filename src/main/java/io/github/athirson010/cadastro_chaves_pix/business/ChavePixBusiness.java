@@ -3,10 +3,7 @@ package io.github.athirson010.cadastro_chaves_pix.business;
 import io.github.athirson010.cadastro_chaves_pix.domains.enums.TipoChaveEnum;
 import io.github.athirson010.cadastro_chaves_pix.domains.requests.CadastroChavePixRequest;
 import io.github.athirson010.cadastro_chaves_pix.domains.responses.CadastroChavePixResponse;
-import io.github.athirson010.cadastro_chaves_pix.utils.validates.ChavePixValidator;
-import io.github.athirson010.cadastro_chaves_pix.utils.validates.ChavePixValidatorCPF;
-import io.github.athirson010.cadastro_chaves_pix.utils.validates.ChavePixValidatorCelular;
-import io.github.athirson010.cadastro_chaves_pix.utils.validates.ChavePixValidatorEmail;
+import io.github.athirson010.cadastro_chaves_pix.utils.validates.*;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -22,8 +19,8 @@ public class ChavePixBusiness {
             case CELULAR -> new ChavePixValidatorCelular();
             case EMAIL -> new ChavePixValidatorEmail();
             case CPF -> new ChavePixValidatorCPF();
-            case CNPJ -> new ChavePixValidatorCPF();
-            case ALEATORIA -> new ChavePixValidatorCPF();
+            case CNPJ -> new ChavePixValidatorCNPJ();
+            case ALEATORIA -> new ChavePixValidatorAleatoria();
         };
     }
 }
