@@ -1,4 +1,4 @@
-package io.github.athirson010.cadastro_chaves_pix.domains.entitys;
+package io.github.athirson010.cadastro_chaves_pix.domains.entity;
 
 import io.github.athirson010.cadastro_chaves_pix.domains.AbstractModel;
 import io.github.athirson010.cadastro_chaves_pix.domains.enums.StatusChaveEnum;

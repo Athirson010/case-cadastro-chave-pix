@@ -1,5 +1,7 @@
 package io.github.athirson010.cadastro_chaves_pix.utils;
 
+import io.github.athirson010.cadastro_chaves_pix.exceptions.ValidacaoException;
+
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -9,7 +11,7 @@ public class ValidacaoRegex {
         Matcher matcher = pattern.matcher(valor);
 
         if (!matcher.matches()) {
-            throw new RuntimeException("");
+            throw new ValidacaoException();
         }
     }
 }
