@@ -1,0 +1,9 @@
+services:
+  mongo:
+    container_name: mongo
+    image: mongo:latest
+    restart: on-failure
+    environment:
+      - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
+    ports:
+      - "27017:27017"
