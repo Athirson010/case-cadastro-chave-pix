@@ -60,6 +60,8 @@ public class ChavesPixController {
             throw new ValidacaoException("Não é permitido a combinacao de filtros. ID com outros filtros");
         }
 
+        //TODO: rever para utilizar example matcher, versão funcional.
+
         return business.buscarChaves(request);
     }
 }
