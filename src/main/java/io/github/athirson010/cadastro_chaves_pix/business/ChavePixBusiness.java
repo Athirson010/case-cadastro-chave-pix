@@ -1,6 +1,7 @@
 package io.github.athirson010.cadastro_chaves_pix.business;
 
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.CadastroChavePixRequest;
+import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.FiltroChavePixRequest;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.CadastroChavePixResponse;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.ChavePixResponse;
 import io.github.athirson010.cadastro_chaves_pix.domains.entity.ChaveEntity;
@@ -18,6 +19,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.UUID;
 
 import static io.github.athirson010.cadastro_chaves_pix.domains.enums.StatusChaveEnum.INATIVA;
@@ -84,5 +86,10 @@ public class ChavePixBusiness {
 
     public ChavePixResponse buscarPorId(String id) {
         return ChaveMapper.of((ChaveEntity) chaveService.findById(id));
+    }
+
+    public List<ChavePixResponse> buscarChaves(FiltroChavePixRequest request) {
+        List<ChaveEntity> list = chaveService.findAll();
+        return list.stream().map(ChaveMapper::of).toList();
     }
 }
