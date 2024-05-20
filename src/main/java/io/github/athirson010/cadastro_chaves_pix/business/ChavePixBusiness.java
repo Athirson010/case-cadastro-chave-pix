@@ -10,6 +10,7 @@ import io.github.athirson010.cadastro_chaves_pix.domains.mappers.ChaveMapper;
 import io.github.athirson010.cadastro_chaves_pix.domains.mappers.ContaMapper;
 import io.github.athirson010.cadastro_chaves_pix.domains.models.ChaveModel;
 import io.github.athirson010.cadastro_chaves_pix.domains.models.ContaModel;
+import io.github.athirson010.cadastro_chaves_pix.exceptions.NaoEncontradoException;
 import io.github.athirson010.cadastro_chaves_pix.exceptions.ValidacaoException;
 import io.github.athirson010.cadastro_chaves_pix.services.ChaveService;
 import io.github.athirson010.cadastro_chaves_pix.services.ContaService;
@@ -23,6 +24,8 @@ import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Pattern;
+import java.util.stream.Collectors;
 
 import static io.github.athirson010.cadastro_chaves_pix.domains.enums.StatusChaveEnum.INATIVA;
 
@@ -89,43 +92,28 @@ public class ChavePixBusiness {
         return ChaveMapper.of((ChaveModel) chaveService.findById(id));
     }
 
-
-    private List<Criteria> resgatarCriteriosChave(FiltroChavePixRequest request) {
-        List<Criteria> criteriosChave = new ArrayList<>();
-
-        if (request.getId() != null) {
-            criteriosChave.add(Criteria.where("id").is(request.getId()));
-        }
-        if (request.getTipoChave() != null) {
-            criteriosChave.add(Criteria.where("tipoChave").is(request.getTipoChave()));
-        }
-
-
-        return criteriosChave;
-    }
-
     public List<ChavePixResponse> buscarChaves(FiltroChavePixRequest request) {
-        List<Criteria> criterios = new ArrayList<>();
+        List<Criteria> criteriosConta = new ArrayList<>();
+        List<Criteria> criteriosChaves = new ArrayList<>();
 
-
-        if (request.getAgencia() != null) {
-            criterios.add(Criteria.where("conta.numeroAgencia").is(request.getAgencia()));
+        if (request.getAgencia() != null && !request.getAgencia().isBlank()) {
+            criteriosConta.add(Criteria.where("numeroAgencia").is(request.getAgencia()));
         }
-        if (request.getConta() != null) {
-            criterios.add(Criteria.where("conta.numeroConta").is(request.getConta()));
+        if (request.getConta() != null && !request.getConta().isBlank()) {
+            criteriosConta.add(Criteria.where("numeroConta").is(request.getConta()));
         }
-        if (request.getNomeCorrentista() != null) {
-            criterios.add(Criteria.where("conta.nomeCorrentista").is(request.getNomeCorrentista()));
+        if (request.getNomeCorrentista() != null && !request.getNomeCorrentista().isBlank()) {
+            criteriosConta.add(Criteria.where("nomeCorrentista").regex(Pattern.quote(request.getNomeCorrentista()), "i"));
         }
 
         if (request.getTipoChave() != null) {
-            criterios.add(Criteria.where("tipoChave").is(request.getTipoChave()));
+            criteriosChaves.add(Criteria.where("tipoChave").is(request.getTipoChave()));
         }
 
         if (request.getDataInclusao() != null) {
             LocalDateTime inclusaoComeco = request.getDataInclusao().atStartOfDay();
             LocalDateTime inclusaoFinal = LocalDateTime.of(request.getDataInclusao(), LocalTime.MAX);
-            criterios.add(Criteria.where("dataInclusao")
+            criteriosChaves.add(Criteria.where("dataInclusao")
                     .gte(inclusaoComeco)
                     .lte(inclusaoFinal));
         }
@@ -133,11 +121,27 @@ public class ChavePixBusiness {
         if (request.getDataInativacao() != null) {
             LocalDateTime inativacaoComeco = request.getDataInativacao().atStartOfDay();
             LocalDateTime inativacaoFinal = LocalDateTime.of(request.getDataInativacao(), LocalTime.MAX);
-            criterios.add(Criteria.where("dataInativacao")
+            criteriosChaves.add(Criteria.where("dataInativacao")
                     .gte(inativacaoComeco)
                     .lte(inativacaoFinal));
         }
 
-        return ((List<ChaveModel>) chaveService.findByCriteria(criterios)).stream().map(ChaveMapper::of).toList();
+        if (!criteriosConta.isEmpty()) {
+            List<ContaModel> contas = contaService.findByCriteria(criteriosConta);
+            List<String> contaIds = contas.stream().map(ContaModel::getId).collect(Collectors.toList());
+
+            criteriosChaves.add(Criteria.where("conta.$id").in(contaIds));
+        }
+
+        List<ChaveModel> chaves;
+        if (!criteriosChaves.isEmpty()) {
+            chaves = chaveService.findByCriteria(criteriosChaves);
+        } else {
+            chaves = chaveService.findAll();
+        }
+        if (chaves.isEmpty()) {
+            throw new NaoEncontradoException("Chaves");
+        }
+        return chaves.stream().map(ChaveMapper::of).toList();
     }
 }
