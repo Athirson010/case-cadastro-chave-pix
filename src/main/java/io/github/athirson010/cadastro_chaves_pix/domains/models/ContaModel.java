@@ -1,4 +1,4 @@
-package io.github.athirson010.cadastro_chaves_pix.domains.entity;
+package io.github.athirson010.cadastro_chaves_pix.domains.models;
 
 import io.github.athirson010.cadastro_chaves_pix.domains.enums.TipoContaEnum;
 import io.github.athirson010.cadastro_chaves_pix.domains.enums.TipoPessoaEnum;
@@ -11,9 +11,8 @@ import org.springframework.data.mongodb.core.mapping.Document;
 @Document("conta")
 @EqualsAndHashCode(callSuper = true)
 @Builder
-public class ContaEntity extends AbstractModel {
+public class ContaModel extends AbstractModel {
     private String nomeCorrentista;
-    private String sobrenomeCorrentista;
     private String numeroAgencia;
     private String numeroConta;
     private TipoContaEnum tipoConta;

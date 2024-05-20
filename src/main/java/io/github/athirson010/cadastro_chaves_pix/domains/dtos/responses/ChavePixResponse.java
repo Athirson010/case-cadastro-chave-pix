@@ -19,7 +19,6 @@ public class ChavePixResponse {
     private String numeroAgencia;
     private String numeroConta;
     private String nomeCorrentista;
-    private String sobrenomeCorrentista;
     private LocalDateTime dataInclusao;
     private LocalDateTime dataInativacao;
 }

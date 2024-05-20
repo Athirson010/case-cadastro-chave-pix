@@ -50,7 +50,17 @@ public class ChavesPixController {
             throw new ValidacaoException("Não é permitido a combinacao de filtros. Data Inclusao & Data Inativacao");
         }
 
-        return business.buscarChaves(request);
+        if (request.getId() != null &&
+                (request.getTipoChave() != null ||
+                        request.getAgencia() != null ||
+                        request.getDataInclusao() != null ||
+                        request.getDataInativacao() != null ||
+                        request.getNomeCorrentista() != null ||
+                        request.getConta() != null)) {
+            throw new ValidacaoException("Não é permitido a combinacao de filtros. ID com outros filtros");
+        }
+
+        return business.buscarChavesPorCriteriosChaveEConta(request);
     }
 }
 

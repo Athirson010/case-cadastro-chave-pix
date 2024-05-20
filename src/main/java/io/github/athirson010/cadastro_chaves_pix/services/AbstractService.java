@@ -1,7 +1,7 @@
 package io.github.athirson010.cadastro_chaves_pix.services;
 
 
-import io.github.athirson010.cadastro_chaves_pix.domains.entity.AbstractModel;
+import io.github.athirson010.cadastro_chaves_pix.domains.models.AbstractModel;
 import io.github.athirson010.cadastro_chaves_pix.exceptions.NaoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -15,6 +15,7 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.security.InvalidParameterException;
 import java.util.List;
+import java.util.UUID;
 
 public abstract class AbstractService<Model extends AbstractModel, Repository extends MongoRepository<Model, String>> {
     protected Repository repository;
@@ -59,13 +60,14 @@ public abstract class AbstractService<Model extends AbstractModel, Repository ex
     }
 
     public Model save(Model model) {
+        model.setId(UUID.randomUUID().toString());
         return repository.save(model);
     }
 
     public Model update(String id, Model model) {
         this.findById(id);
         model.setId(id);
-        modelGenerico = save(model);
+        modelGenerico = repository.save(model);
         return modelGenerico;
     }
 

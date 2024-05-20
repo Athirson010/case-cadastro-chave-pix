@@ -4,23 +4,26 @@ import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.CadastroC
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.FiltroChavePixRequest;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.CadastroChavePixResponse;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.ChavePixResponse;
-import io.github.athirson010.cadastro_chaves_pix.domains.entity.ChaveEntity;
-import io.github.athirson010.cadastro_chaves_pix.domains.entity.ContaEntity;
 import io.github.athirson010.cadastro_chaves_pix.domains.enums.TipoChaveEnum;
 import io.github.athirson010.cadastro_chaves_pix.domains.enums.TipoPessoaEnum;
 import io.github.athirson010.cadastro_chaves_pix.domains.mappers.ChaveMapper;
 import io.github.athirson010.cadastro_chaves_pix.domains.mappers.ContaMapper;
+import io.github.athirson010.cadastro_chaves_pix.domains.models.ChaveModel;
+import io.github.athirson010.cadastro_chaves_pix.domains.models.ContaModel;
 import io.github.athirson010.cadastro_chaves_pix.exceptions.ValidacaoException;
 import io.github.athirson010.cadastro_chaves_pix.services.ChaveService;
 import io.github.athirson010.cadastro_chaves_pix.services.ContaService;
 import io.github.athirson010.cadastro_chaves_pix.utils.validacoes.chave_pix.ChavePixValidacao;
 import io.github.athirson010.cadastro_chaves_pix.utils.validacoes.chave_pix.impl.*;
+import org.springframework.data.mongodb.core.query.Criteria;
+import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 import static io.github.athirson010.cadastro_chaves_pix.domains.enums.StatusChaveEnum.INATIVA;
 
@@ -41,12 +44,11 @@ public class ChavePixBusiness {
                 .validarCaracteristicasChave(body.getValorChave())
                 .validarExistenciaChave(body.getValorChave(), chaveService);
 
-        ContaEntity conta = verificarConta(body);
+        ContaModel conta = verificarConta(body);
 
         resgatarQuantidadeChavePorConta(conta.getId(), body.getTipoPessoa());
 
-        ChaveEntity chave = ChaveMapper.of(body, conta);
-        chave.setId(UUID.randomUUID().toString());
+        ChaveModel chave = ChaveMapper.of(body, conta);
 
         return new CadastroChavePixResponse(chaveService.save(chave).getId());
     }
@@ -57,9 +59,9 @@ public class ChavePixBusiness {
         }
     }
 
-    private ContaEntity verificarConta(CadastroChavePixRequest body) {
+    private ContaModel verificarConta(CadastroChavePixRequest body) {
         return contaService.buscarContaPorNumeroEAgencia(body.getNumeroConta(), body.getNumeroAgencia())
-                .orElseGet(() -> (ContaEntity) contaService.save(ContaMapper.of(body)));
+                .orElseGet(() -> (ContaModel) contaService.save(ContaMapper.of(body)));
     }
 
     private ChavePixValidacao resgatarTipoValidacao(TipoChaveEnum tipoChave) {
@@ -73,7 +75,7 @@ public class ChavePixBusiness {
     }
 
     public ChavePixResponse inativarChavePix(String id) {
-        ChaveEntity chave = (ChaveEntity) chaveService
+        ChaveModel chave = (ChaveModel) chaveService
                 .findById(id);
 
         if (chave.getStatus().equals(INATIVA)) {
@@ -81,15 +83,63 @@ public class ChavePixBusiness {
         }
         chave.setDataInativacao(LocalDateTime.now());
         chave.setStatus(INATIVA);
-        return ChaveMapper.of((ChaveEntity) chaveService.update(id, chave));
+        return ChaveMapper.of((ChaveModel) chaveService.update(id, chave));
     }
 
     public ChavePixResponse buscarPorId(String id) {
-        return ChaveMapper.of((ChaveEntity) chaveService.findById(id));
+        return ChaveMapper.of((ChaveModel) chaveService.findById(id));
     }
 
-    public List<ChavePixResponse> buscarChaves(FiltroChavePixRequest request) {
-        List<ChaveEntity> list = chaveService.findAll();
-        return list.stream().map(ChaveMapper::of).toList();
+
+    private List<Criteria> resgatarCriteriosChave(FiltroChavePixRequest request) {
+        List<Criteria> criteriosChave = new ArrayList<>();
+
+        if (request.getId() != null) {
+            criteriosChave.add(Criteria.where("id").is(request.getId()));
+        }
+        if (request.getTipoChave() != null) {
+            criteriosChave.add(Criteria.where("tipoChave").is(request.getTipoChave()));
+        }
+        if (request.getDataInclusao() != null) {
+            LocalDateTime inclusaoComeco = request.getDataInclusao().atStartOfDay();
+            LocalDateTime inclusaoFinal = LocalDateTime.of(request.getDataInclusao(), LocalTime.MAX);
+            criteriosChave.add(Criteria.where("dataInclusao")
+                    .gte(inclusaoComeco)
+                    .lte(inclusaoFinal));
+        }
+        if (request.getDataInativacao() != null) {
+            LocalDateTime inativacaoComeco = request.getDataInativacao().atStartOfDay();
+            LocalDateTime inativacaoFinal = LocalDateTime.of(request.getDataInativacao(), LocalTime.MAX);
+            criteriosChave.add(Criteria.where("dataInativacao")
+                    .gte(inativacaoComeco)
+                    .lte(inativacaoFinal));
+        }
+
+        return criteriosChave;
+    }
+
+    private List<Criteria> resgatarCriteriosConta(FiltroChavePixRequest request) {
+        List<Criteria> criteriosConta = new ArrayList<>();
+        if (request.getAgencia() != null) {
+            criteriosConta.add(Criteria.where("numeroAgencia").is(request.getAgencia()));
+        }
+        if (request.getConta() != null) {
+            criteriosConta.add(Criteria.where("numeroConta").is(request.getConta()));
+        }
+        if (request.getNomeCorrentista() != null) {
+            criteriosConta.add(Criteria.where("nomeCorrentista").is(request.getNomeCorrentista()));
+        }
+        return criteriosConta;
+    }
+
+    public List<ChavePixResponse> buscarChavesPorCriteriosChaveEConta(FiltroChavePixRequest request) {
+        List<ContaModel> contas = contaService.findByCriteria(resgatarCriteriosConta(request));
+        List<Criteria> criteriosChave = resgatarCriteriosChave(request);
+        Query query = new Query();
+        if (!criteriosChave.isEmpty()) {
+            query.addCriteria(new Criteria().andOperator(Criteria.where("conta").in(contas))
+                    .orOperator(criteriosChave.toArray(new Criteria[0])));
+        }
+        return chaveService.findByCriteria(criteriosChave).stream().map(ChaveMapper::of).toList();
     }
 }
