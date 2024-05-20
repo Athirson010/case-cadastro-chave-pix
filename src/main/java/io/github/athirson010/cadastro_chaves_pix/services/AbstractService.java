@@ -15,7 +15,6 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 
 import java.security.InvalidParameterException;
 import java.util.List;
-import java.util.UUID;
 
 public abstract class AbstractService<Model extends AbstractModel, Repository extends MongoRepository<Model, String>> {
     protected Repository repository;
@@ -60,7 +59,6 @@ public abstract class AbstractService<Model extends AbstractModel, Repository ex
     }
 
     public Model save(Model model) {
-        model.setId(UUID.randomUUID().toString());
         return repository.save(model);
     }
 

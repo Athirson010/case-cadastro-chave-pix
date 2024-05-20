@@ -24,4 +24,5 @@ public class ChaveService extends AbstractService {
     public int buscarQuantidadeChavesAtivasPorConta(String idConta) {
         return repository.countByContaIdAndStatus(idConta, StatusChaveEnum.ATIVA);
     }
+
 }

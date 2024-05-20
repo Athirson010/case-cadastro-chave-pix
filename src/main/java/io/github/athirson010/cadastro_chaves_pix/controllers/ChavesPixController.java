@@ -3,6 +3,7 @@ package io.github.athirson010.cadastro_chaves_pix.controllers;
 import io.github.athirson010.cadastro_chaves_pix.business.ChavePixBusiness;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.CadastroChavePixRequest;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.CadastroChavePixResponse;
+import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.DelecaoChavePixResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -22,6 +23,12 @@ public class ChavesPixController {
     @ResponseStatus(HttpStatus.OK)
     public CadastroChavePixResponse cadastrarChavePix(@Valid @RequestBody CadastroChavePixRequest body) {
         return business.criarChaveComConta(body);
+    }
+
+    @DeleteMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public DelecaoChavePixResponse inativarChavePix(@PathVariable String id) {
+        return business.inativarChavePix(id);
     }
 }
 
