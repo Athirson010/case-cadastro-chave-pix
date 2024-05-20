@@ -28,8 +28,8 @@ public class GerenciadorException {
     @ExceptionHandler(ValidacaoException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     public ResponseEntity tratarValidacao(ValidacaoException e) {
-        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(new Erro(e.getMessage(),
-                Collections.singletonList(e.getDetalhes())));
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(new Erro(e.getDetalhes(), null));
+
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
