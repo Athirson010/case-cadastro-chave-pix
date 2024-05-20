@@ -20,6 +20,7 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.ArrayList;
@@ -91,10 +92,20 @@ public class ChavePixBusiness {
     public ChavePixResponse buscarPorId(String id) {
         return ChaveMapper.of((ChaveModel) chaveService.findById(id));
     }
-
     public List<ChavePixResponse> buscarChaves(FiltroChavePixRequest request) {
+        List<Criteria> criteriosConta = construirCriteriosConta(request);
+        List<Criteria> criteriosChaves = construirCriteriosChaves(request, criteriosConta);
+        List<ChaveModel> chaves = findChavesByCriteria(criteriosChaves);
+
+        if (chaves.isEmpty()) {
+            throw new NaoEncontradoException("Chaves");
+        }
+
+        return chaves.stream().map(ChaveMapper::of).toList();
+    }
+
+    private List<Criteria> construirCriteriosConta(FiltroChavePixRequest request) {
         List<Criteria> criteriosConta = new ArrayList<>();
-        List<Criteria> criteriosChaves = new ArrayList<>();
 
         if (request.getAgencia() != null && !request.getAgencia().isBlank()) {
             criteriosConta.add(Criteria.where("numeroAgencia").is(request.getAgencia()));
@@ -106,42 +117,51 @@ public class ChavePixBusiness {
             criteriosConta.add(Criteria.where("nomeCorrentista").regex(Pattern.quote(request.getNomeCorrentista()), "i"));
         }
 
+        return criteriosConta;
+    }
+
+    private List<Criteria> construirCriteriosChaves(FiltroChavePixRequest request, List<Criteria> criteriosConta) {
+        List<Criteria> criteriosChaves = new ArrayList<>();
+
         if (request.getTipoChave() != null) {
             criteriosChaves.add(Criteria.where("tipoChave").is(request.getTipoChave()));
         }
-
         if (request.getDataInclusao() != null) {
-            LocalDateTime inclusaoComeco = request.getDataInclusao().atStartOfDay();
-            LocalDateTime inclusaoFinal = LocalDateTime.of(request.getDataInclusao(), LocalTime.MAX);
-            criteriosChaves.add(Criteria.where("dataInclusao")
-                    .gte(inclusaoComeco)
-                    .lte(inclusaoFinal));
+            criteriosChaves.add(construirDataInclusaoCriteria(request.getDataInclusao()));
         }
-
         if (request.getDataInativacao() != null) {
-            LocalDateTime inativacaoComeco = request.getDataInativacao().atStartOfDay();
-            LocalDateTime inativacaoFinal = LocalDateTime.of(request.getDataInativacao(), LocalTime.MAX);
-            criteriosChaves.add(Criteria.where("dataInativacao")
-                    .gte(inativacaoComeco)
-                    .lte(inativacaoFinal));
+            criteriosChaves.add(construirDataInativacaoCriteria(request.getDataInativacao()));
         }
-
         if (!criteriosConta.isEmpty()) {
-            List<ContaModel> contas = contaService.findByCriteria(criteriosConta);
-            List<String> contaIds = contas.stream().map(ContaModel::getId).collect(Collectors.toList());
-
-            criteriosChaves.add(Criteria.where("conta.$id").in(contaIds));
+            criteriosChaves.add(construirContaIdCriteria(criteriosConta));
         }
 
-        List<ChaveModel> chaves;
+        return criteriosChaves;
+    }
+
+    private Criteria construirDataInclusaoCriteria(LocalDate dataInclusao) {
+        LocalDateTime inclusaoComeco = dataInclusao.atStartOfDay();
+        LocalDateTime inclusaoFinal = LocalDateTime.of(dataInclusao, LocalTime.MAX);
+        return Criteria.where("dataInclusao").gte(inclusaoComeco).lte(inclusaoFinal);
+    }
+
+    private Criteria construirDataInativacaoCriteria(LocalDate dataInativacao) {
+        LocalDateTime inativacaoComeco = dataInativacao.atStartOfDay();
+        LocalDateTime inativacaoFinal = LocalDateTime.of(dataInativacao, LocalTime.MAX);
+        return Criteria.where("dataInativacao").gte(inativacaoComeco).lte(inativacaoFinal);
+    }
+
+    private Criteria construirContaIdCriteria(List<Criteria> criteriosConta) {
+        List<ContaModel> contas = contaService.findByCriteria(criteriosConta);
+        List<String> contaIds = contas.stream().map(ContaModel::getId).collect(Collectors.toList());
+        return Criteria.where("conta.$id").in(contaIds);
+    }
+
+    private List<ChaveModel> findChavesByCriteria(List<Criteria> criteriosChaves) {
         if (!criteriosChaves.isEmpty()) {
-            chaves = chaveService.findByCriteria(criteriosChaves);
+            return chaveService.findByCriteria(criteriosChaves);
         } else {
-            chaves = chaveService.findAll();
+            return chaveService.findAll();
         }
-        if (chaves.isEmpty()) {
-            throw new NaoEncontradoException("Chaves");
-        }
-        return chaves.stream().map(ChaveMapper::of).toList();
     }
 }
