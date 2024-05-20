@@ -12,6 +12,6 @@ import java.util.Optional;
 public interface ChaveRepository extends MongoRepository<ChaveModel, String> {
     Optional<ChaveModel> findByValorChaveAndStatus(String chave, StatusChaveEnum status);
 
-    int countByContaIdAndStatus(String idConta, StatusChaveEnum status);
 
+    int countByNumeroContaAndNumeroAgenciaAndStatus(String numeroConta, String numeroAgencia, StatusChaveEnum statusChaveEnum);
 }

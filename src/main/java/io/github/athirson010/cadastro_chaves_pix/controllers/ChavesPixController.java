@@ -1,13 +1,18 @@
 package io.github.athirson010.cadastro_chaves_pix.controllers;
 
 import io.github.athirson010.cadastro_chaves_pix.business.ChavePixBusiness;
+import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.AtualizarChavePixRequest;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.CadastroChavePixRequest;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.FiltroChavePixRequest;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.CadastroChavePixResponse;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.ChavePixResponse;
+import io.github.athirson010.cadastro_chaves_pix.domains.mappers.ChaveMapper;
+import io.github.athirson010.cadastro_chaves_pix.domains.models.ChaveModel;
 import io.github.athirson010.cadastro_chaves_pix.exceptions.ValidacaoException;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -35,6 +40,12 @@ public class ChavesPixController {
         return business.inativarChavePix(id);
     }
 
+    @PutMapping("/{id}")
+    @ResponseStatus(HttpStatus.OK)
+    public List<ChavePixResponse> atualizarChavePix(@PathVariable String id, @Valid @RequestBody AtualizarChavePixRequest request) {
+        return business.atualizar(id, request);
+    }
+
     @GetMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ChavePixResponse buscarPorId(@PathVariable String id) {
@@ -60,9 +71,15 @@ public class ChavesPixController {
             throw new ValidacaoException("Não é permitido a combinacao de filtros. ID com outros filtros");
         }
 
-        //TODO: rever para utilizar example matcher, versão funcional.
+        ChaveModel filtro = ChaveMapper.of(request);
 
-        return business.buscarChaves(request);
+        Example<ChaveModel> example = Example.of(filtro,
+                ExampleMatcher.matchingAll()
+                        .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
+                        .withIncludeNullValues()
+                        .withIgnoreCase());
+
+        return business.buscarChaves(example);
     }
 }
 
