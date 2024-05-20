@@ -9,6 +9,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import java.util.Collections;
+
 @RestControllerAdvice
 public class GerenciadorException {
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
@@ -26,13 +28,20 @@ public class GerenciadorException {
     @ExceptionHandler(ValidacaoException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     public ResponseEntity tratarValidacao(ValidacaoException e) {
-        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
+        return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).body(new Erro(e.getMessage(),
+                Collections.singletonList(e.getDetalhes())));
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)
     public ResponseEntity tratarValidacaoEnum(HttpMessageNotReadableException e) {
         return ResponseEntity.status(HttpStatus.UNPROCESSABLE_ENTITY).build();
+    }
+
+    @ExceptionHandler(NaoEncontradoException.class)
+    @ResponseStatus(HttpStatus.NOT_FOUND)
+    public ResponseEntity tratarNaoEncontrado(NaoEncontradoException e) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
     }
 
 }

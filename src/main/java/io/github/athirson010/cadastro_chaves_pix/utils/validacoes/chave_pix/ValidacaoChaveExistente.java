@@ -12,7 +12,7 @@ public class ValidacaoChaveExistente {
 
     public void validar(String valor) {
         if (chaveService.buscarChavePorValorChave(valor).isPresent()) {
-            throw new ValidacaoException();
+            throw new ValidacaoException("Chave já cadastrada e ativa");
         }
     }
 }

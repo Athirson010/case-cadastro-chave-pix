@@ -11,7 +11,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Data
 @Builder
-public class DelecaoChavePixResponse {
+public class ChavePixResponse {
     private String id;
     private TipoChaveEnum tipoChave;
     private String valorChave;

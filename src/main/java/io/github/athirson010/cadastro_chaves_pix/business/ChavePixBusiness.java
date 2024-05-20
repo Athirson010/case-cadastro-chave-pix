@@ -2,7 +2,7 @@ package io.github.athirson010.cadastro_chaves_pix.business;
 
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.CadastroChavePixRequest;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.CadastroChavePixResponse;
-import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.DelecaoChavePixResponse;
+import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.ChavePixResponse;
 import io.github.athirson010.cadastro_chaves_pix.domains.entity.ChaveEntity;
 import io.github.athirson010.cadastro_chaves_pix.domains.entity.ContaEntity;
 import io.github.athirson010.cadastro_chaves_pix.domains.enums.TipoChaveEnum;
@@ -51,7 +51,7 @@ public class ChavePixBusiness {
 
     private void resgatarQuantidadeChavePorConta(String id, TipoPessoaEnum tipoPessoa) {
         if (chaveService.buscarQuantidadeChavesAtivasPorConta(id) >= tipoPessoa.getLimitePermitido()) {
-            throw new ValidacaoException();
+            throw new ValidacaoException("Limite de chaves atingido");
         }
     }
 
@@ -70,15 +70,19 @@ public class ChavePixBusiness {
         };
     }
 
-    public DelecaoChavePixResponse inativarChavePix(String id) {
+    public ChavePixResponse inativarChavePix(String id) {
         ChaveEntity chave = (ChaveEntity) chaveService
                 .findById(id);
 
         if (chave.getStatus().equals(INATIVA)) {
-            throw new ValidacaoException();
+            throw new ValidacaoException("Chave ja inativa");
         }
         chave.setDataInativacao(LocalDateTime.now());
         chave.setStatus(INATIVA);
         return ChaveMapper.of((ChaveEntity) chaveService.update(id, chave));
+    }
+
+    public ChavePixResponse buscarPorId(String id) {
+        return ChaveMapper.of((ChaveEntity) chaveService.findById(id));
     }
 }

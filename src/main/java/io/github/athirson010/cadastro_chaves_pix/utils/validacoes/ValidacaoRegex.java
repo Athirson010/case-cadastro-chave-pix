@@ -11,7 +11,7 @@ public class ValidacaoRegex {
         Matcher matcher = pattern.matcher(valor);
 
         if (!matcher.matches()) {
-            throw new ValidacaoException();
+            throw new ValidacaoException("O valor: " + valor + " não é valido");
         }
     }
 }
