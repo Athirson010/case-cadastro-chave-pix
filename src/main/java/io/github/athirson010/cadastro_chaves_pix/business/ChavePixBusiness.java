@@ -16,7 +16,6 @@ import io.github.athirson010.cadastro_chaves_pix.services.ContaService;
 import io.github.athirson010.cadastro_chaves_pix.utils.validacoes.chave_pix.ChavePixValidacao;
 import io.github.athirson010.cadastro_chaves_pix.utils.validacoes.chave_pix.impl.*;
 import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -100,46 +99,45 @@ public class ChavePixBusiness {
         if (request.getTipoChave() != null) {
             criteriosChave.add(Criteria.where("tipoChave").is(request.getTipoChave()));
         }
-        if (request.getDataInclusao() != null) {
-            LocalDateTime inclusaoComeco = request.getDataInclusao().atStartOfDay();
-            LocalDateTime inclusaoFinal = LocalDateTime.of(request.getDataInclusao(), LocalTime.MAX);
-            criteriosChave.add(Criteria.where("dataInclusao")
-                    .gte(inclusaoComeco)
-                    .lte(inclusaoFinal));
-        }
-        if (request.getDataInativacao() != null) {
-            LocalDateTime inativacaoComeco = request.getDataInativacao().atStartOfDay();
-            LocalDateTime inativacaoFinal = LocalDateTime.of(request.getDataInativacao(), LocalTime.MAX);
-            criteriosChave.add(Criteria.where("dataInativacao")
-                    .gte(inativacaoComeco)
-                    .lte(inativacaoFinal));
-        }
+
 
         return criteriosChave;
     }
 
-    private List<Criteria> resgatarCriteriosConta(FiltroChavePixRequest request) {
-        List<Criteria> criteriosConta = new ArrayList<>();
+    public List<ChavePixResponse> buscarChaves(FiltroChavePixRequest request) {
+        List<Criteria> criterios = new ArrayList<>();
+
+
         if (request.getAgencia() != null) {
-            criteriosConta.add(Criteria.where("numeroAgencia").is(request.getAgencia()));
+            criterios.add(Criteria.where("conta.numeroAgencia").is(request.getAgencia()));
         }
         if (request.getConta() != null) {
-            criteriosConta.add(Criteria.where("numeroConta").is(request.getConta()));
+            criterios.add(Criteria.where("conta.numeroConta").is(request.getConta()));
         }
         if (request.getNomeCorrentista() != null) {
-            criteriosConta.add(Criteria.where("nomeCorrentista").is(request.getNomeCorrentista()));
+            criterios.add(Criteria.where("conta.nomeCorrentista").is(request.getNomeCorrentista()));
         }
-        return criteriosConta;
-    }
 
-    public List<ChavePixResponse> buscarChavesPorCriteriosChaveEConta(FiltroChavePixRequest request) {
-        List<ContaModel> contas = contaService.findByCriteria(resgatarCriteriosConta(request));
-        List<Criteria> criteriosChave = resgatarCriteriosChave(request);
-        Query query = new Query();
-        if (!criteriosChave.isEmpty()) {
-            query.addCriteria(new Criteria().andOperator(Criteria.where("conta").in(contas))
-                    .orOperator(criteriosChave.toArray(new Criteria[0])));
+        if (request.getTipoChave() != null) {
+            criterios.add(Criteria.where("tipoChave").is(request.getTipoChave()));
         }
-        return chaveService.findByCriteria(criteriosChave).stream().map(ChaveMapper::of).toList();
+
+        if (request.getDataInclusao() != null) {
+            LocalDateTime inclusaoComeco = request.getDataInclusao().atStartOfDay();
+            LocalDateTime inclusaoFinal = LocalDateTime.of(request.getDataInclusao(), LocalTime.MAX);
+            criterios.add(Criteria.where("dataInclusao")
+                    .gte(inclusaoComeco)
+                    .lte(inclusaoFinal));
+        }
+
+        if (request.getDataInativacao() != null) {
+            LocalDateTime inativacaoComeco = request.getDataInativacao().atStartOfDay();
+            LocalDateTime inativacaoFinal = LocalDateTime.of(request.getDataInativacao(), LocalTime.MAX);
+            criterios.add(Criteria.where("dataInativacao")
+                    .gte(inativacaoComeco)
+                    .lte(inativacaoFinal));
+        }
+
+        return ((List<ChaveModel>) chaveService.findByCriteria(criterios)).stream().map(ChaveMapper::of).toList();
     }
 }

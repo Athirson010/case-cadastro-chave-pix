@@ -60,7 +60,7 @@ public class ChavesPixController {
             throw new ValidacaoException("Não é permitido a combinacao de filtros. ID com outros filtros");
         }
 
-        return business.buscarChavesPorCriteriosChaveEConta(request);
+        return business.buscarChaves(request);
     }
 }
 
