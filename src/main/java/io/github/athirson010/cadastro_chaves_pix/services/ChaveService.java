@@ -5,8 +5,6 @@ import io.github.athirson010.cadastro_chaves_pix.domains.enums.TipoPessoaEnum;
 import io.github.athirson010.cadastro_chaves_pix.domains.models.ChaveModel;
 import io.github.athirson010.cadastro_chaves_pix.repository.ChaveRepository;
 import org.springframework.data.domain.Example;
-import org.springframework.data.mongodb.core.query.Criteria;
-import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -25,18 +23,9 @@ public class ChaveService extends AbstractService {
         return repository.findByValorChaveAndStatus(chave, StatusChaveEnum.ATIVA);
     }
 
-    public List<ChaveModel> findByCriteria(List<Criteria> criteriaList) {
-        Query query = new Query();
-        if (criteriaList != null && !criteriaList.isEmpty()) {
-            query.addCriteria(new Criteria().andOperator(criteriaList.toArray(new Criteria[0])));
-        }
-        return mongoTemplate.find(query, ChaveModel.class);
-    }
-
-    public List<ChaveModel> findAll(Example<ChaveModel> example) {
+    public List<ChaveModel> buscarTudo(Example<ChaveModel> example) {
         return repository.findAll(example);
     }
-
 
     public int buscarQuantidadeChavesAtivasPorNumeroContaENumeroAgencia(String numeroConta, String numeroAgencia, TipoPessoaEnum tipoPessoa) {
         return repository.countByNumeroContaAndNumeroAgenciaAndStatus(numeroConta, numeroAgencia, StatusChaveEnum.ATIVA);

@@ -17,8 +17,11 @@ import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static io.github.athirson010.cadastro_chaves_pix.domains.enums.StatusChaveEnum.INATIVA;
 
@@ -76,15 +79,38 @@ public class ChavePixBusiness {
         return ChaveMapper.of((ChaveModel) chaveService.findById(id));
     }
 
-    public List<ChavePixResponse> buscarChaves(Example example) {
-
-        List<ChaveModel> chaves = (List<ChaveModel>) chaveService.findAll(example);
+    public List<ChavePixResponse> buscarChaves(Example<ChaveModel> example) {
+        List<ChaveModel> chaves = filtrarIntervalosDatas(chaveService.buscarTudo(example), example.getProbe());
 
         if (chaves.isEmpty()) {
             throw new NaoEncontradoException("Chaves");
         }
 
         return chaves.stream().map(ChaveMapper::of).toList();
+    }
+
+    private List<ChaveModel> filtrarIntervalosDatas(List<ChaveModel> chaves, ChaveModel filtro) {
+        if (filtro.getDataInclusao() != null) {
+            LocalDateTime inclusaoComeco = filtro.getDataInclusao();
+            LocalDateTime inclusaoFinal = LocalDateTime.of(LocalDate.from(filtro.getDataInclusao()), LocalTime.MAX);
+
+            return chaves.stream()
+                    .filter(chave -> chave.getDataInclusao() != null &&
+                            !chave.getDataInclusao().isBefore(inclusaoComeco) &&
+                            !chave.getDataInclusao().isAfter(inclusaoFinal))
+                    .collect(Collectors.toList());
+        }
+        if (filtro.getDataInativacao() != null) {
+            LocalDateTime inclusaoComeco = filtro.getDataInativacao();
+            LocalDateTime inclusaoFinal = LocalDateTime.of(LocalDate.from(filtro.getDataInativacao()), LocalTime.MAX);
+
+            return chaves.stream()
+                    .filter(chave -> chave.getDataInclusao() != null &&
+                            !chave.getDataInativacao().isBefore(inclusaoComeco) &&
+                            !chave.getDataInativacao().isAfter(inclusaoFinal))
+                    .collect(Collectors.toList());
+        }
+        return chaves;
     }
 
 

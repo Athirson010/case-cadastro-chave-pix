@@ -76,7 +76,8 @@ public class ChavesPixController {
         Example<ChaveModel> example = Example.of(filtro,
                 ExampleMatcher.matchingAll()
                         .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
-                        .withIncludeNullValues()
+                        .withIgnoreNullValues()
+                        .withIgnorePaths("dataInclusao", "dataInativacao")
                         .withIgnoreCase());
 
         return business.buscarChaves(example);
