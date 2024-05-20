@@ -1,4 +1,4 @@
-package io.github.athirson010.cadastro_chaves_pix.utils;
+package io.github.athirson010.cadastro_chaves_pix.utils.validacoes;
 
 public class ValidacaoCPF {
     private static final int[] pesoCPF = {11, 10, 9, 8, 7, 6, 5, 4, 3, 2};

@@ -1,9 +1,9 @@
 package io.github.athirson010.cadastro_chaves_pix.domains.entity;
 
-import io.github.athirson010.cadastro_chaves_pix.domains.AbstractModel;
 import io.github.athirson010.cadastro_chaves_pix.domains.enums.StatusChaveEnum;
 import io.github.athirson010.cadastro_chaves_pix.domains.enums.TipoChaveEnum;
 import jakarta.validation.constraints.NotNull;
+import lombok.Builder;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import org.springframework.data.mongodb.core.mapping.DBRef;
@@ -14,6 +14,7 @@ import java.time.LocalDateTime;
 @Document("chave")
 @Data
 @EqualsAndHashCode(callSuper = true)
+@Builder
 public class ChaveEntity extends AbstractModel {
     @DBRef
     @NotNull

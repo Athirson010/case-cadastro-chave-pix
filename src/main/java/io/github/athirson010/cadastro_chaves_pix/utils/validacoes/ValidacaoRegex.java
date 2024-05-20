@@ -1,4 +1,4 @@
-package io.github.athirson010.cadastro_chaves_pix.utils;
+package io.github.athirson010.cadastro_chaves_pix.utils.validacoes;
 
 import io.github.athirson010.cadastro_chaves_pix.exceptions.ValidacaoException;
 

@@ -1,4 +1,4 @@
-package io.github.athirson010.cadastro_chaves_pix.domains.requests;
+package io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests;
 
 import io.github.athirson010.cadastro_chaves_pix.domains.enums.TipoChaveEnum;
 import io.github.athirson010.cadastro_chaves_pix.domains.enums.TipoContaEnum;
