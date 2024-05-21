@@ -29,7 +29,6 @@ import static io.github.athirson010.cadastro_chaves_pix.domains.enums.StatusChav
 public class ChavePixBusiness {
     private final ChaveService chaveService;
 
-
     public ChavePixBusiness(ChaveService chaveService) {
         this.chaveService = chaveService;
     }

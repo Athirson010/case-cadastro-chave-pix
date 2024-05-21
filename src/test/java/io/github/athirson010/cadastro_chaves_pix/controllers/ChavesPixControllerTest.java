@@ -2,6 +2,7 @@ package io.github.athirson010.cadastro_chaves_pix.controllers;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.github.athirson010.cadastro_chaves_pix.business.ChavePixBusiness;
+import io.github.athirson010.cadastro_chaves_pix.dados.ChaveMassa;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.AtualizarChavePixRequest;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.CadastroChavePixRequest;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.CadastroChavePixResponse;
@@ -32,19 +33,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 class ChavesPixControllerTest {
     private MockMvc mockMvc;
-
     @Mock
     private ChavePixBusiness business;
-
     @InjectMocks
     private ChavesPixController controller;
-
     ObjectMapper objectMapper = new ObjectMapper();
     CadastroChavePixResponse respostaID = new CadastroChavePixResponse("10");
-    CadastroChavePixRequest cadastroRequest = new CadastroChavePixRequest(TipoChaveEnum.CPF, "4827447841",
-            TipoContaEnum.CORRENTE, "1234", "12345678", "TESTE", "TESTE", FISICA);
-
-    ChaveModel modelo = ChaveMapper.of(cadastroRequest);
+   ChaveModel modelo = ChaveMapper.of(ChaveMassa.cadastroChavePixRequest());
 
     @BeforeEach
     public void setup() {
@@ -58,7 +53,7 @@ class ChavesPixControllerTest {
 
         mockMvc.perform(post("/v1/chave-pix")
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(objectMapper.writeValueAsString(cadastroRequest)));
+                .content(objectMapper.writeValueAsString(ChaveMassa.cadastroChavePixRequest())));
 
         verify(business, times(1)).criarChaveComConta(any(CadastroChavePixRequest.class));
     }
