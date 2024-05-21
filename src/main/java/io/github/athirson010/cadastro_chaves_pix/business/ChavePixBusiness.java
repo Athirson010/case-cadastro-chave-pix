@@ -113,9 +113,7 @@ public class ChavePixBusiness {
         }
         return chaves;
     }
-
-
-    public List<ChavePixResponse> atualizar(String id, AtualizarChavePixRequest request) {
-        return null;
+    public ChaveModel atualizar(String id, AtualizarChavePixRequest request) {
+        return (ChaveModel) chaveService.update(id, ChaveMapper.of(request));
     }
 }

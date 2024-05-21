@@ -42,7 +42,7 @@ public class ChavesPixController {
 
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
-    public List<ChavePixResponse> atualizarChavePix(@PathVariable String id, @Valid @RequestBody AtualizarChavePixRequest request) {
+    public ChaveModel atualizarChavePix(@PathVariable String id, @Valid @RequestBody AtualizarChavePixRequest request) {
         return business.atualizar(id, request);
     }
 
