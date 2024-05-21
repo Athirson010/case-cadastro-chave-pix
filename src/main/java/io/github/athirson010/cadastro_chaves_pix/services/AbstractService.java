@@ -36,6 +36,7 @@ public abstract class AbstractService<Model extends AbstractModel, Repository ex
     }
 
     public List<Model> saveAll(List<Model> models) {
+        models.forEach(model -> model.setId(UUID.randomUUID().toString()));
         return repository.saveAll(models);
     }
 
