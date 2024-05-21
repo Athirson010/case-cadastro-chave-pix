@@ -17,9 +17,9 @@ class ChavePixValidacaoCelularTest {
 
     @Test
     public void testCelularInvalido() {
-        String celular1 = "+55abc12345678"; // contém caracteres não numéricos
-        String celular2 = "123456789"; // menos de 9 dígitos
-        String celular3 = "1234567890123456789"; // mais de 15 dígitos
+        String celular1 = "+55abc12345678";
+        String celular2 = "123456789";
+        String celular3 = "1234567890123456789";
         assertThrows(ValidacaoException.class, () -> chavePixValidacaoCelular.validarCaracteristicasChave(celular1));
         assertThrows(ValidacaoException.class, () -> chavePixValidacaoCelular.validarCaracteristicasChave(celular2));
         assertThrows(ValidacaoException.class, () -> chavePixValidacaoCelular.validarCaracteristicasChave(celular3));
