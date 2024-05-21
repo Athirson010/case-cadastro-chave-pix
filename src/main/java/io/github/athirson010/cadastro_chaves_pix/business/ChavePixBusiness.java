@@ -113,6 +113,7 @@ public class ChavePixBusiness {
         }
         return chaves;
     }
+
     public ChaveModel atualizar(String id, AtualizarChavePixRequest request) {
         return (ChaveModel) chaveService.update(id, ChaveMapper.of(request));
     }

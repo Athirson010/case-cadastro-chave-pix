@@ -8,7 +8,6 @@ import io.github.athirson010.cadastro_chaves_pix.domains.enums.StatusChaveEnum;
 import io.github.athirson010.cadastro_chaves_pix.domains.models.ChaveModel;
 
 import java.time.LocalDateTime;
-import java.util.List;
 
 public class ChaveMapper {
     public static ChaveModel of(CadastroChavePixRequest request) {
