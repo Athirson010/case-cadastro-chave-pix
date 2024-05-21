@@ -27,3 +27,6 @@ public class ChaveModel extends AbstractModel {
     private LocalDateTime dataInativacao;
     private StatusChaveEnum status;
 }
+
+//TODO Sugestão Conta ter Lista de CHAVES
+
