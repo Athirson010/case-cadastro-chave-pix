@@ -38,14 +38,14 @@ public class ChaveMapper {
     }
 
     public static ChaveModel of(FiltroChavePixRequest request) {
-        return ChaveModel
-                .builder()
-                .tipoChave(request.getTipoChave())
-                .dataInclusao(request.getDataInclusao() != null ? request.getDataInclusao().atStartOfDay() : null)
-                .dataInativacao(request.getDataInativacao() != null ? request.getDataInativacao().atStartOfDay() : null)
-                .nomeCorrentista(request.getNomeCorrentista())
-                .numeroAgencia(request.getAgencia())
-                .numeroConta(request.getConta())
-                .build();
+        ChaveModel chave = new ChaveModel();
+        chave.setTipoChave(request.getTipoChave());
+        chave.setId(request.getId());
+        chave.setDataInclusao(request.getDataInclusao() != null ? request.getDataInclusao().atStartOfDay() : null);
+        chave.setDataInativacao(request.getDataInativacao() != null ? request.getDataInativacao().atStartOfDay() : null);
+        chave.setNomeCorrentista(request.getNomeCorrentista());
+        chave.setNumeroConta(request.getConta());
+        chave.setNumeroAgencia(request.getAgencia());
+  return chave;
     }
 }

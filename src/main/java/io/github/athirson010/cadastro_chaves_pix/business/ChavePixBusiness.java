@@ -90,6 +90,7 @@ public class ChavePixBusiness {
     }
 
     private List<ChaveModel> filtrarIntervalosDatas(List<ChaveModel> chaves, ChaveModel filtro) {
+
         if (filtro.getDataInclusao() != null) {
             LocalDateTime inclusaoComeco = filtro.getDataInclusao();
             LocalDateTime inclusaoFinal = LocalDateTime.of(LocalDate.from(filtro.getDataInclusao()), LocalTime.MAX);
