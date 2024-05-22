@@ -2,12 +2,21 @@ package io.github.athirson010.cadastro_chaves_pix.controllers;
 
 import io.github.athirson010.cadastro_chaves_pix.business.ChavePixV2Business;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.CadastroChavePixRequest;
+import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.FiltroChavePixRequest;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.CadastroChavePixResponse;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.ChavePixResponse;
+import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.v2.ContaResponseV2;
+import io.github.athirson010.cadastro_chaves_pix.domains.mappers.ChaveV2Mapper;
+import io.github.athirson010.cadastro_chaves_pix.domains.models.ChaveModelV2;
+import io.github.athirson010.cadastro_chaves_pix.exceptions.ValidacaoException;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RequestMapping(value = "/v2/chave-pix")
 @Tag(name = "V2")
@@ -31,35 +40,35 @@ public class ChavesPixV2Controller {
         return business.inativarChavePix(id);
     }
 
-//    @GetMapping
-//    @ResponseStatus(HttpStatus.OK)
-//    public List<ChavePixResponse> buscarChaves(
-//            FiltroChavePixRequest request) {
-//
-//        if (request.getDataInclusao() != null & request.getDataInativacao() != null) {
-//            throw new ValidacaoException("Não é permitido a combinacao de filtros. Data Inclusao & Data Inativacao");
-//        }
-//
-//        if (request.getId() != null &&
-//                (request.getTipoChave() != null ||
-//                        request.getAgencia() != null ||
-//                        request.getDataInclusao() != null ||
-//                        request.getDataInativacao() != null ||
-//                        request.getNomeCorrentista() != null ||
-//                        request.getConta() != null)) {
-//            throw new ValidacaoException("Não é permitido a combinacao de filtros. ID com outros filtros");
-//        }
-//
-//        ChaveModelV2 filtro = ChaveV2Mapper.of(request);
-//
-//        Example<ChaveModelV2> example = Example.of(filtro,
-//                ExampleMatcher.matchingAll()
-//                        .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
-//                        .withIgnoreNullValues()
-//                        .withIgnorePaths("dataInclusao", "dataInativacao")
-//                        .withIgnoreCase());
-//
-//        return business.buscarChaves(example);
-//    }
+    @GetMapping
+    @ResponseStatus(HttpStatus.OK)
+    public List<ContaResponseV2> buscarChaves(
+            FiltroChavePixRequest request) {
+
+        if (request.getDataInclusao() != null & request.getDataInativacao() != null) {
+            throw new ValidacaoException("Não é permitido a combinacao de filtros. Data Inclusao & Data Inativacao");
+        }
+
+        if (request.getId() != null &&
+                (request.getTipoChave() != null ||
+                        request.getAgencia() != null ||
+                        request.getDataInclusao() != null ||
+                        request.getDataInativacao() != null ||
+                        request.getNomeCorrentista() != null ||
+                        request.getConta() != null)) {
+            throw new ValidacaoException("Não é permitido a combinacao de filtros. ID com outros filtros");
+        }
+
+        ChaveModelV2 filtro = ChaveV2Mapper.of(request);
+
+        Example<ChaveModelV2> example = Example.of(filtro,
+                ExampleMatcher.matchingAll()
+                        .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
+                        .withIgnoreNullValues()
+                        .withIgnorePaths("dataInclusao", "dataInativacao")
+                        .withIgnoreCase());
+
+        return business.buscarChaves(example);
+    }
 
 }

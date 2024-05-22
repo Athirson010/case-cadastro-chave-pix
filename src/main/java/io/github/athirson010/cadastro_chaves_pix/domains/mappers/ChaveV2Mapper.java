@@ -1,6 +1,8 @@
 package io.github.athirson010.cadastro_chaves_pix.domains.mappers;
 
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.CadastroChavePixRequest;
+import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.FiltroChavePixRequest;
+import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.v2.ChaveResponseV2;
 import io.github.athirson010.cadastro_chaves_pix.domains.enums.StatusChaveEnum;
 import io.github.athirson010.cadastro_chaves_pix.domains.models.ChaveModelV2;
 import io.github.athirson010.cadastro_chaves_pix.utils.AbstractModel;
@@ -17,13 +19,26 @@ public class ChaveV2Mapper {
                 .status(StatusChaveEnum.ATIVA)
                 .build();
     }
-//    public static ChaveModelV2 of(FiltroChavePixRequest request) {
-//        return ChaveModelV2.builder()
-//                .contaId(save.getId())
-//                .valorChave(body.getValorChave())
-//                .dataInclusao(LocalDateTime.now())
-//                .tipoChave(body.getTipoChave())
-//                .status(StatusChaveEnum.ATIVA)
-//                .build();
-//    }
+
+    public static ChaveModelV2 of(FiltroChavePixRequest request) {
+        ChaveModelV2 chaveModelV2 = ChaveModelV2.builder()
+                .dataInclusao(request.getDataInclusao() != null ? request.getDataInclusao().atStartOfDay() : null)
+                .dataInativacao(request.getDataInativacao() != null ? request.getDataInativacao().atStartOfDay() : null)
+                .tipoChave(request.getTipoChave())
+                .build();
+
+        chaveModelV2.setId(request.getId());
+
+        return chaveModelV2;
+    }
+
+    public static ChaveResponseV2 of(ChaveModelV2 chaveModelV2) {
+        return ChaveResponseV2.builder()
+                .id(chaveModelV2.getId())
+                .dataInativacao(chaveModelV2.getDataInativacao())
+                .dataInclusao(chaveModelV2.getDataInclusao())
+                .tipoChave(chaveModelV2.getTipoChave())
+                .valorChave(chaveModelV2.getValorChave())
+                .build();
+    }
 }

@@ -3,6 +3,7 @@ package io.github.athirson010.cadastro_chaves_pix.business;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.CadastroChavePixRequest;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.CadastroChavePixResponse;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.ChavePixResponse;
+import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.v2.ContaResponseV2;
 import io.github.athirson010.cadastro_chaves_pix.domains.enums.TipoPessoaEnum;
 import io.github.athirson010.cadastro_chaves_pix.domains.mappers.ChaveMapper;
 import io.github.athirson010.cadastro_chaves_pix.domains.mappers.ChaveV2Mapper;
@@ -12,10 +13,12 @@ import io.github.athirson010.cadastro_chaves_pix.domains.models.ContaModelV2;
 import io.github.athirson010.cadastro_chaves_pix.exceptions.ValidacaoException;
 import io.github.athirson010.cadastro_chaves_pix.services.v2.ChaveServiceV2;
 import io.github.athirson010.cadastro_chaves_pix.services.v2.ContaServiceV2;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
 
 import static io.github.athirson010.cadastro_chaves_pix.domains.enums.StatusChaveEnum.INATIVA;
@@ -76,5 +79,25 @@ public class ChavePixV2Business {
         ContaModelV2 conta = (ContaModelV2) contaServiceV2.findById(chave.getContaId());
 
         return ChaveMapper.of((ChaveModelV2) chaveServiceV2.update(id, chave), conta);
+    }
+
+    public List<ContaResponseV2> buscarChaves(Example<ChaveModelV2> example) {
+        List<ChaveModelV2> chaves = chaveServiceV2.buscarTudo(example);
+
+        List<String> contas = chaves
+                .stream()
+                .map(ChaveModelV2::getContaId)
+                .distinct()
+                .toList();
+
+        return contaServiceV2.buscarContasPorIds(contas)
+                .stream()
+                .map(contaModelV2 ->
+                        ContaV2Mapper
+                                .of(contaModelV2, chaves.stream()
+                                        .filter(chaveModelV2 ->
+                                                chaveModelV2.getContaId().equals(contaModelV2.getId()))
+                                        .toList()))
+                .toList();
     }
 }
