@@ -1,178 +1,81 @@
-# case-cadastro-chave-pix
+# Desenho de Arquitetura
+![Fluxograma](docs/desenho-arquitetura.png)
 
-1. Código-base
-   Uma base de código rastreada em controle de versão, muitos deploys
-   Use um sistema de controle de versão como Git. O código da sua aplicação Java deve residir em um único repositório.
+# Perguntas do case:
 
-2. Dependências
-   Declare e isole explicitamente as dependências
-   Use uma ferramenta de build como Maven ou Gradle para gerenciar dependências.
+## Questão 1
+* Tempo de resposta dos endpoints POST /pagamento e / GET /pagamentos - P50 / P99
+* Quantidade de threads simultâneas (min/avg/max) por período.
+* Tempo total para aprovação de uma chave min/avg/max) por período (entre envio até resposta do contacorrente)
+* Taxa de scalling-in / scalling-out dos serviços.
+* Saúde da aplicação (cpu/memoria etc) e recursos de infraestrutura envolvidos (SQS/Dynamo etc)
+* Quantidade de erros SaldoInsuficienteException retornado pelo "conta-corrente" por período.
+* Quando reportado a exceção ContaSuspensaPorFraudeException pelo "conta-corrente" deve ser enviado
+  um alarme seja por email/teams/slack. para o time "análise de fraudes".
+* Quando mais de 10 pagamentos num prazo de 1 hora forem negados por "excedeu o tempo" o time deve
+  ser notificado seja por email/teams/slack.
 
-xml
-Copiar código
-<!-- pom.xml para Maven -->
-<project>
-    <modelVersion>4.0.0</modelVersion>
-    <groupId>com.exemplo</groupId>
-    <artifactId>twelve-factor-app</artifactId>
-    <version>1.0-SNAPSHOT</version>
-    <dependencies>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-web</artifactId>
-        </dependency>
-    </dependencies>
-</project>
-3. Configurações
-Armazene configurações no ambiente
-Use variáveis de ambiente para configurar sua aplicação. Você pode usar @Value ou @ConfigurationProperties no Spring Boot para injetar essas variáveis.
+### CloudWatch:
+    Contém todas as monitorias necessarias do item 1.
+![Fluxograma](docs/cloudWatch.png)
 
-java
-Copiar código
-// Aplicacao.java
-@SpringBootApplication
-public class Aplicacao {
-public static void main(String[] args) {
-SpringApplication.run(Aplicacao.class, args);
-}
-}
+### Grafana:
+    Monitoria as Métricas em geral alimentado pelo Cloudwatch
+    Saúde da aplicação (cpu/memoria etc) e recursos de infraestrutura envolvidos (SQS/Dynamo etc)
+![Fluxograma](docs/grafana.png)
 
-// application.properties
-app.message=${APP_MESSAGE:Olá, Mundo!}
+### Jaegger:
+    Monitoria de traces por intervalos de tempo.
+    Ele monta uma cascata de chamadas com todos os detalhes de tempo, mostrando um possivel ofensor na comunicação 
+    entre serviços.
+![Fluxograma](docs/jaegger.png)
 
-// MensagemController.java
-@RestController
-public class MensagemController {
+## Questão 2
 
-    @Value("${app.message}")
-    private String message;
+O Serviço suporta no máximo 10000 solicitações simultâneas. Ambos os endpoints devem disponibilizar
+taxas de aceitação semelhantes.
 
-    @GetMapping("/mensagem")
-    public String getMessage() {
-        return message;
-    }
+![Fluxograma](docs/api-gateway-limitador.png)
+Fonte: https://docs.aws.amazon.com/pt_br/apigateway/latest/developerguide/api-gateway-request-throttling.html
 
-}
+    Além de otimizar a minha aplicação para executar o máximo de requisições, aplicaria dentro de uma infraestrutura k8s utilizando uma configuração de HPA (Horizontal Pod Autoscaling) para subir os pods sobre demanda.
+    Orquestrar um teste de estresse com 10000 requisições simultâneas, analisando a quantidade de pods replicados e deixar como média.
 
-4. Serviços de apoio
-   Trate serviços de apoio como recursos anexados
-   Configure serviços como bancos de dados usando variáveis de ambiente.
+O Pagamento pode ser processado dentro de 30 minutos. Garantir que o "conta-corrente" receberá a
+mensagem dentro do período. Caso o prazo seja ultrapassado, deverá ser finalizado como "excedeu prazo"
 
-yaml
-Copiar código
+    Utilizaria um serviço para enviar o pagamento de forma assíncrona para uma mensageria e consultaria seu status periodicamente. Para a comunicação, utilizaria uma integração com o SNS.
 
-# application.properties
+Durante o envio de um pagamento, caso o conta-cliente ou o serviço do BACEN apresente erro 5xx deverá
+ser realizada até 3 tentativas de envio.
+    
+    Conforme a solução anterior, o evento de mensagem estaria em um serviço de mensageria junto com a quantidade de tentativas. Assim, o serviço pode fazer o gerenciamento.
 
-spring.datasource.url=${DATABASE_URL}
-spring.datasource.username=${DATABASE_USERNAME}
-spring.datasource.password=${DATABASE_PASSWORD}
+Caso o serviço "conta-cliente" e o "serviço-bacen" apresente sucessivamente erros 5xx deverá ser reduzida
+a entrada de novas solicitações de pagamentos até que o serviço apresenta melhoria na taxa de resposta.
 
-5. Build, release, run
-   Separe estritamente os estágios de build e execução
-   Use ferramentas como Jenkins ou GitHub Actions para automatizar o processo de build e release.
+    Monitorando com o CloudWatch e definindo as métricas, integra-se com o AWS WAF para bloquear o tráfego (circuit breaker)
 
-bash
-Copiar código
+A suspensão de uma conta por suspeita de fraude é válida por 1 hora. O serviço "conta-cliente" possui
+taxa e resposta de 2s. Reduza a dependência com este serviço se possível.
 
-# Exemplo de script de build
+    Em caso de suspensão de conta, podemos alimentar um cache com uma chave única (CPF/CNPJ/Número da conta + Agência). Antes de solicitar o serviço de conta, ele faz essa validação, eliminando assim essa dependência.
 
-./mvnw clean package
-docker build -t meuapp:latest .
+## Questão 3
 
-6. Processos
-   Execute a aplicação como um ou mais processos sem estado
-   Sua aplicação deve ser sem estado. Armazene o estado da sessão em um datastore como Redis.
+* Durante um deploy em produção, deverá ser garantida a aplicação da estratégia de blue-green no serviço
+"pix-inicia-pagamento-service". Indique o que deverá ser garantido no recurso e previamente testado.
 
-java
-Copiar código
-// Exemplo de serviço sem estado
-@RestController
-public class StatelessController {
-@GetMapping("/stateless")
-public String stateless() {
-return "Resposta sem estado em " + LocalDateTime.now();
-}
-}
+      blue-green são dois serviços com o mesmo ambiente, e se o serviço novo aumentar a taxa de erro ele não realiza o deploy completo e efetua o rollback.
+      Já utilizei algo parecido "Cannary" onde uma quantidade especifica de usuários utilizam uma nova url com as novas features
 
-7. Vinculação de portas
-   Exporte serviços via vinculação de portas
-   Use servidores embutidos como Tomcat ou Jetty.
+* Pagamentos com mais de 6 meses deverão ser removidos da base de dados do serviço "pix-iniciapagamento-service".
+      
+      Um scheduler, executado a cada 30 dias, realizaria uma query que limparia os dados anteriores à data de hoje menos 6 meses, removendo tudo antes dessa data gerada.
 
-java
-Copiar código
-// Spring Boot usa um servidor Tomcat embutido
+* O período de suspensão de uma conta e tempo máximo de envio de um pagamento para processamento
+são valores bem definidos, mas que podem ser alterados em caso de incidente. Garanta que sejam fáceis de serem alterados,
+porém devidamente governados/auditados. 
 
-8. Concurrency
-   Escale via o modelo de processos
-   Execute múltiplas instâncias de sua aplicação.
 
-bash
-Copiar código
-
-# Exemplo de configuração Docker Compose para escalonamento
-
-version: '3'
-services:
-app:
-image: meuapp:latest
-ports:
-
-- "8080:8080"
-  deploy:
-  replicas: 3
-
-9. Descartabilidade
-   Maximize a robustez com startup rápido e desligamento gracioso
-   Garanta que sua aplicação possa iniciar e desligar rapidamente.
-
-java
-Copiar código
-// Aplicacao.java
-public class Aplicacao {
-public static void main(String[] args) {
-SpringApplication app = new SpringApplication(Aplicacao.class);
-app.setRegisterShutdownHook(true);
-app.run(args);
-}
-}
-
-10. Paridade Dev/Prod
-    Mantenha desenvolvimento, staging e produção o mais semelhantes possível
-    Use Docker para garantir consistência.
-
-dockerfile
-Copiar código
-
-# Dockerfile
-
-FROM openjdk:11-jre-slim
-COPY target/twelve-factor-app.jar app.jar
-ENTRYPOINT ["java","-jar","/app.jar"]
-
-11. Logs
-    Trate logs como fluxos de eventos
-    Use um framework de logging como Logback e envie logs para stdout/stderr.
-
-xml
-Copiar código
-<!-- logback.xml -->
-<configuration>
-    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
-        <encoder>
-            <pattern>%d{yyyy-MM-dd HH:mm:ss} - %msg%n</pattern>
-        </encoder>
-    </appender>
-    <root level="info">
-        <appender-ref ref="STDOUT"/>
-    </root>
-</configuration>
-12. Processos administrativos
-Execute tarefas administrativas/gerenciais como processos pontuais
-Use o suporte integrado do Spring Boot para tarefas administrativas.
-
-bash
-Copiar código
-
-# Executando uma tarefa de migração de banco de dados
-
-./mvnw flyway:migrate
+    Utilizar Variáveis de ambientes em um security manager.
