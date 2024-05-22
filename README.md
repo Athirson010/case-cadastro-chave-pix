@@ -1,3 +1,5 @@
+![Fluxograma](docs/itau-app.png)
+
 # Desenho de Arquitetura
 ![Fluxograma](docs/desenho-arquitetura.png)
 
