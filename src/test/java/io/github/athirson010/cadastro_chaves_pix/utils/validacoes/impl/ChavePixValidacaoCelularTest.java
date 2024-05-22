@@ -1,4 +1,4 @@
-package io.github.athirson010.cadastro_chaves_pix.utils.validacoes.chave_pix.impl;
+package io.github.athirson010.cadastro_chaves_pix.utils.validacoes.impl;
 
 import io.github.athirson010.cadastro_chaves_pix.exceptions.ValidacaoException;
 import org.junit.jupiter.api.Test;

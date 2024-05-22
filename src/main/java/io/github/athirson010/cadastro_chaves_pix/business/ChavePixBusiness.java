@@ -11,8 +11,8 @@ import io.github.athirson010.cadastro_chaves_pix.domains.models.ChaveModel;
 import io.github.athirson010.cadastro_chaves_pix.exceptions.NaoEncontradoException;
 import io.github.athirson010.cadastro_chaves_pix.exceptions.ValidacaoException;
 import io.github.athirson010.cadastro_chaves_pix.services.ChaveService;
-import io.github.athirson010.cadastro_chaves_pix.utils.validacoes.chave_pix.ChavePixValidacao;
-import io.github.athirson010.cadastro_chaves_pix.utils.validacoes.chave_pix.impl.*;
+import io.github.athirson010.cadastro_chaves_pix.utils.validacoes.ChavePixValidacao;
+import io.github.athirson010.cadastro_chaves_pix.utils.validacoes.impl.*;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static io.github.athirson010.cadastro_chaves_pix.domains.enums.StatusChaveEnum.INATIVA;
+import static io.github.athirson010.cadastro_chaves_pix.utils.validacoes.ValidacaoChave.resgatarTipoValidacao;
 
 @Service
 public class ChavePixBusiness {
@@ -52,15 +53,7 @@ public class ChavePixBusiness {
         }
     }
 
-    private ChavePixValidacao resgatarTipoValidacao(TipoChaveEnum tipoChave) {
-        return switch (tipoChave) {
-            case CELULAR -> new ChavePixValidacaoCelular();
-            case EMAIL -> new ChavePixValidacaoEmail();
-            case CPF -> new ChavePixValidacaoCPF();
-            case CNPJ -> new ChavePixValidacaoCNPJ();
-            case ALEATORIA -> new ChavePixValidacaoAleatoria();
-        };
-    }
+
 
     public ChavePixResponse inativarChavePix(String id) {
         ChaveModel chave = (ChaveModel) chaveService
