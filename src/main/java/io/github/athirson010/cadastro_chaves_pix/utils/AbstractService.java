@@ -1,7 +1,6 @@
-package io.github.athirson010.cadastro_chaves_pix.services;
+package io.github.athirson010.cadastro_chaves_pix.utils;
 
 
-import io.github.athirson010.cadastro_chaves_pix.domains.models.AbstractModel;
 import io.github.athirson010.cadastro_chaves_pix.exceptions.NaoEncontradoException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;

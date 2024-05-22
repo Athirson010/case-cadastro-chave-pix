@@ -4,6 +4,7 @@ import io.github.athirson010.cadastro_chaves_pix.domains.enums.TipoChaveEnum;
 import io.github.athirson010.cadastro_chaves_pix.domains.enums.TipoContaEnum;
 import io.github.athirson010.cadastro_chaves_pix.domains.enums.TipoPessoaEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
+import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -26,10 +27,13 @@ public class CadastroChavePixRequest {
     private String numeroConta;
     @Length(max = 30)
     @Schema(example = "Athirson")
+    @NotBlank
     private String nomeCorrentista;
     @Length(max = 45)
     @Schema(example = "Candido")
+    @NotBlank
     private String sobrenomeCorrentista;
     @NotNull
     private TipoPessoaEnum tipoPessoa;
+
 }

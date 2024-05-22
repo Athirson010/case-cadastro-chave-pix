@@ -13,4 +13,6 @@ public interface ChaveRepository extends MongoRepository<ChaveModel, String> {
     Optional<ChaveModel> findByValorChaveAndStatus(String chave, StatusChaveEnum status);
 
     int countByNumeroContaAndNumeroAgenciaAndStatus(String numeroConta, String numeroAgencia, StatusChaveEnum statusChaveEnum);
+
+    Optional<ChaveModel> findByNumeroContaAndNumeroAgencia(String numeroConta, String numeroAgencia);
 }

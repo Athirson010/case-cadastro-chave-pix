@@ -3,6 +3,7 @@ package io.github.athirson010.cadastro_chaves_pix.utils.validacoes;
 import io.github.athirson010.cadastro_chaves_pix.domains.enums.TipoChaveEnum;
 import io.github.athirson010.cadastro_chaves_pix.exceptions.ValidacaoException;
 import io.github.athirson010.cadastro_chaves_pix.services.ChaveService;
+import io.github.athirson010.cadastro_chaves_pix.services.v2.ChaveServiceV2;
 import io.github.athirson010.cadastro_chaves_pix.utils.validacoes.impl.*;
 
 import java.util.regex.Matcher;
@@ -11,13 +12,29 @@ import java.util.regex.Pattern;
 public class ValidacaoChave {
     private final ChaveService chaveService;
 
+    private final ChaveServiceV2 chaveServiceV2;
+
     public ValidacaoChave(ChaveService chaveService) {
         this.chaveService = chaveService;
+        this.chaveServiceV2 = null;
+    }
+
+    public ValidacaoChave(ChaveServiceV2 chaveServiceV2) {
+        this.chaveService = null;
+        this.chaveServiceV2 = chaveServiceV2;
     }
 
     public void validarExistencia(String valor) {
-        if (chaveService.buscarChavePorValorChave(valor).isPresent()) {
-            throw new ValidacaoException("Chave já cadastrada e ativa");
+        if (chaveService != null) {
+            if (chaveService.buscarChavePorValorChave(valor).isPresent()) {
+                throw new ValidacaoException("Chave já cadastrada e ativa");
+            }
+        }
+
+        if (chaveServiceV2 != null) {
+            if (chaveServiceV2.buscarChavePorValorChave(valor).isPresent()) {
+                throw new ValidacaoException("Chave já cadastrada e ativa");
+            }
         }
     }
 

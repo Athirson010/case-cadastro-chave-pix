@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RequestMapping(value = "/v1/chave-pix")
-@Tag(name = "Chave PIX")
+@Tag(name = "V1")
 @RestController
 public class ChavesPixController {
     private final ChavePixBusiness business;

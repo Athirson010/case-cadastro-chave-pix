@@ -1,11 +1,13 @@
 ![Fluxograma](docs/itau-app.png)
 
 # Desenho de Arquitetura
+
 ![Fluxograma](docs/desenho-arquitetura.png)
 
 # Perguntas do case:
 
 ## Questão 1
+
 * Tempo de resposta dos endpoints POST /pagamento e / GET /pagamentos - P50 / P99
 * Quantidade de threads simultâneas (min/avg/max) por período.
 * Tempo total para aprovação de uma chave min/avg/max) por período (entre envio até resposta do contacorrente)
@@ -18,18 +20,24 @@
   ser notificado seja por email/teams/slack.
 
 ### CloudWatch:
+
     Contém todas as monitorias necessarias do item 1.
+
 ![Fluxograma](docs/cloudWatch.png)
 
 ### Grafana:
+
     Monitoria as Métricas em geral alimentado pelo Cloudwatch
     Saúde da aplicação (cpu/memoria etc) e recursos de infraestrutura envolvidos (SQS/Dynamo etc)
+
 ![Fluxograma](docs/grafana.png)
 
 ### Jaegger:
+
     Monitoria de traces por intervalos de tempo.
     Ele monta uma cascata de chamadas com todos os detalhes de tempo, mostrando um possivel ofensor na comunicação 
     entre serviços.
+
 ![Fluxograma](docs/jaegger.png)
 
 ## Questão 2
@@ -50,7 +58,7 @@ mensagem dentro do período. Caso o prazo seja ultrapassado, deverá ser finaliz
 
 Durante o envio de um pagamento, caso o conta-cliente ou o serviço do BACEN apresente erro 5xx deverá
 ser realizada até 3 tentativas de envio.
-    
+
     Conforme a solução anterior, o evento de mensagem estaria em um serviço de mensageria junto com a quantidade de tentativas. Assim, o serviço pode fazer o gerenciamento.
 
 Caso o serviço "conta-cliente" e o "serviço-bacen" apresente sucessivamente erros 5xx deverá ser reduzida
@@ -66,18 +74,18 @@ taxa e resposta de 2s. Reduza a dependência com este serviço se possível.
 ## Questão 3
 
 * Durante um deploy em produção, deverá ser garantida a aplicação da estratégia de blue-green no serviço
-"pix-inicia-pagamento-service". Indique o que deverá ser garantido no recurso e previamente testado.
+  "pix-inicia-pagamento-service". Indique o que deverá ser garantido no recurso e previamente testado.
 
       blue-green são dois serviços com o mesmo ambiente, e se o serviço novo aumentar a taxa de erro ele não realiza o deploy completo e efetua o rollback.
       Já utilizei algo parecido "Cannary" onde uma quantidade especifica de usuários utilizam uma nova url com as novas features
 
 * Pagamentos com mais de 6 meses deverão ser removidos da base de dados do serviço "pix-iniciapagamento-service".
-      
+
       Um scheduler, executado a cada 30 dias, realizaria uma query que limparia os dados anteriores à data de hoje menos 6 meses, removendo tudo antes dessa data gerada.
 
 * O período de suspensão de uma conta e tempo máximo de envio de um pagamento para processamento
-são valores bem definidos, mas que podem ser alterados em caso de incidente. Garanta que sejam fáceis de serem alterados,
-porém devidamente governados/auditados. 
+  são valores bem definidos, mas que podem ser alterados em caso de incidente. Garanta que sejam fáceis de serem
+  alterados,
+  porém devidamente governados/auditados.
 
-
-    Utilizar Variáveis de ambientes em um security manager.
+  Utilizar Variáveis de ambientes em um security manager.

@@ -7,7 +7,6 @@ import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.Atualizar
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.CadastroChavePixRequest;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.CadastroChavePixResponse;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.ChavePixResponse;
-import io.github.athirson010.cadastro_chaves_pix.domains.enums.TipoChaveEnum;
 import io.github.athirson010.cadastro_chaves_pix.domains.enums.TipoContaEnum;
 import io.github.athirson010.cadastro_chaves_pix.domains.mappers.ChaveMapper;
 import io.github.athirson010.cadastro_chaves_pix.domains.models.ChaveModel;
@@ -24,10 +23,8 @@ import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import java.util.ArrayList;
 import java.util.List;
 
-import static io.github.athirson010.cadastro_chaves_pix.domains.enums.TipoPessoaEnum.FISICA;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 
@@ -39,7 +36,7 @@ class ChavesPixControllerTest {
     private ChavesPixController controller;
     ObjectMapper objectMapper = new ObjectMapper();
     CadastroChavePixResponse respostaID = new CadastroChavePixResponse("10");
-   ChaveModel modelo = ChaveMapper.of(ChaveMassa.cadastroChavePixRequest());
+    ChaveModel modelo = ChaveMapper.of(ChaveMassa.cadastroChavePixRequest());
 
     @BeforeEach
     public void setup() {
@@ -92,17 +89,17 @@ class ChavesPixControllerTest {
     public void testBuscarPorId() throws Exception {
         ChavePixResponse response = ChaveMapper.of(modelo);
 
-       when(business.buscarPorId(anyString())).thenReturn(response);
+        when(business.buscarPorId(anyString())).thenReturn(response);
 
-       mockMvc.perform(get("/v1/chave-pix/{id}", "123"))
+        mockMvc.perform(get("/v1/chave-pix/{id}", "123"))
                 .andExpect(status().isOk());
 
         verify(business, times(1)).buscarPorId("123");
-   }
+    }
 
     @Test
-   public void testBuscarChaves() throws Exception {
-       List<ChavePixResponse> responseList = new ArrayList<>();
+    public void testBuscarChaves() throws Exception {
+        List<ChavePixResponse> responseList = new ArrayList<>();
 
         when(business.buscarChaves(any(Example.class))).thenReturn(responseList);
 

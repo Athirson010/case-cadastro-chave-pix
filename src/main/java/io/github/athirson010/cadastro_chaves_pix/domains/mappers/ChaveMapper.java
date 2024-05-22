@@ -6,6 +6,8 @@ import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.FiltroCha
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.ChavePixResponse;
 import io.github.athirson010.cadastro_chaves_pix.domains.enums.StatusChaveEnum;
 import io.github.athirson010.cadastro_chaves_pix.domains.models.ChaveModel;
+import io.github.athirson010.cadastro_chaves_pix.domains.models.ChaveModelV2;
+import io.github.athirson010.cadastro_chaves_pix.domains.models.ContaModelV2;
 
 import java.time.LocalDateTime;
 
@@ -56,6 +58,20 @@ public class ChaveMapper {
                 .numeroConta(request.getNumeroConta())
                 .numeroAgencia(request.getNumeroAgencia())
                 .nomeCorrentista(request.getNomeCorrentista().concat(" ").concat(request.getSobrenomeCorrentista()))
+                .build();
+    }
+
+    public static ChavePixResponse of(ChaveModelV2 update, ContaModelV2 conta) {
+        return ChavePixResponse.builder()
+                .id(update.getId())
+                .numeroConta(conta.getNumeroConta())
+                .numeroAgencia(conta.getNumeroAgencia())
+                .nomeCorrentista(conta.getNomeCorrentista())
+                .tipoConta(conta.getTipoConta())
+                .tipoChave(update.getTipoChave())
+                .valorChave(update.getValorChave())
+                .dataInclusao(update.getDataInclusao())
+                .dataInativacao(update.getDataInativacao())
                 .build();
     }
 }

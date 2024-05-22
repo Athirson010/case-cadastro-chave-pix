@@ -4,15 +4,12 @@ import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.Atualizar
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.CadastroChavePixRequest;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.CadastroChavePixResponse;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.ChavePixResponse;
-import io.github.athirson010.cadastro_chaves_pix.domains.enums.TipoChaveEnum;
 import io.github.athirson010.cadastro_chaves_pix.domains.enums.TipoPessoaEnum;
 import io.github.athirson010.cadastro_chaves_pix.domains.mappers.ChaveMapper;
 import io.github.athirson010.cadastro_chaves_pix.domains.models.ChaveModel;
 import io.github.athirson010.cadastro_chaves_pix.exceptions.NaoEncontradoException;
 import io.github.athirson010.cadastro_chaves_pix.exceptions.ValidacaoException;
 import io.github.athirson010.cadastro_chaves_pix.services.ChaveService;
-import io.github.athirson010.cadastro_chaves_pix.utils.validacoes.ChavePixValidacao;
-import io.github.athirson010.cadastro_chaves_pix.utils.validacoes.impl.*;
 import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -48,12 +45,10 @@ public class ChavePixBusiness {
     }
 
     private void resgatarQuantidadeChavePorConta(String numeroConta, String numeroAgencia, TipoPessoaEnum tipoPessoa) {
-        if (chaveService.buscarQuantidadeChavesAtivasPorNumeroContaENumeroAgencia(numeroConta, numeroAgencia, tipoPessoa) >= tipoPessoa.getLimitePermitido()) {
+        if (chaveService.buscarQuantidadeChavesAtivasPorNumeroContaENumeroAgencia(numeroConta, numeroAgencia) >= tipoPessoa.getLimitePermitido()) {
             throw new ValidacaoException("Limite de chaves atingido");
         }
     }
-
-
 
     public ChavePixResponse inativarChavePix(String id) {
         ChaveModel chave = (ChaveModel) chaveService

@@ -1,4 +1,4 @@
-package io.github.athirson010.cadastro_chaves_pix.domains.models;
+package io.github.athirson010.cadastro_chaves_pix.utils;
 
 
 import lombok.Data;

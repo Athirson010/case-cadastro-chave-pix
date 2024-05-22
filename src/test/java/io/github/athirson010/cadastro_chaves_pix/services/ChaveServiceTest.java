@@ -54,7 +54,7 @@ class ChaveServiceTest {
         when(repository.countByNumeroContaAndNumeroAgenciaAndStatus(numeroConta, numeroAgencia, StatusChaveEnum.ATIVA))
                 .thenReturn(expectedCount);
 
-        int result = service.buscarQuantidadeChavesAtivasPorNumeroContaENumeroAgencia(numeroConta, numeroAgencia, tipoPessoa);
+        int result = service.buscarQuantidadeChavesAtivasPorNumeroContaENumeroAgencia(numeroConta, numeroAgencia);
         assertEquals(expectedCount, result);
     }
 
