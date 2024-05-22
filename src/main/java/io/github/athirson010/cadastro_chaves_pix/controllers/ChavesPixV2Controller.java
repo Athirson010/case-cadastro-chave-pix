@@ -7,7 +7,9 @@ import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.Cadastro
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.ChavePixResponse;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.v2.ContaResponseV2;
 import io.github.athirson010.cadastro_chaves_pix.domains.mappers.ChaveV2Mapper;
+import io.github.athirson010.cadastro_chaves_pix.domains.mappers.ContaV2Mapper;
 import io.github.athirson010.cadastro_chaves_pix.domains.models.ChaveModelV2;
+import io.github.athirson010.cadastro_chaves_pix.domains.models.ContaModelV2;
 import io.github.athirson010.cadastro_chaves_pix.exceptions.ValidacaoException;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -59,16 +61,23 @@ public class ChavesPixV2Controller {
             throw new ValidacaoException("Não é permitido a combinacao de filtros. ID com outros filtros");
         }
 
-        ChaveModelV2 filtro = ChaveV2Mapper.of(request);
+        ChaveModelV2 filtroChave = ChaveV2Mapper.of(request);
+        ContaModelV2 filtroConta = ContaV2Mapper.of(request);
 
-        Example<ChaveModelV2> example = Example.of(filtro,
+        Example<ChaveModelV2> exampleChave = Example.of(filtroChave,
                 ExampleMatcher.matchingAll()
                         .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
                         .withIgnoreNullValues()
                         .withIgnorePaths("dataInclusao", "dataInativacao")
                         .withIgnoreCase());
 
-        return business.buscarChaves(example);
+        Example<ContaModelV2> exampleConta = Example.of(filtroConta,
+                ExampleMatcher.matchingAll()
+                        .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
+                        .withIgnoreNullValues()
+                        .withIgnoreCase());
+
+        return business.buscarChaves(exampleChave, exampleConta);
     }
 
 }

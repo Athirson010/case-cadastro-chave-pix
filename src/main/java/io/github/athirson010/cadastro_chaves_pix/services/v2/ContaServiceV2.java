@@ -3,6 +3,7 @@ package io.github.athirson010.cadastro_chaves_pix.services.v2;
 import io.github.athirson010.cadastro_chaves_pix.domains.models.ContaModelV2;
 import io.github.athirson010.cadastro_chaves_pix.repository.ContaV2Repository;
 import io.github.athirson010.cadastro_chaves_pix.utils.AbstractService;
+import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -23,5 +24,9 @@ public class ContaServiceV2 extends AbstractService {
 
     public List<ContaModelV2> buscarContasPorIds(List<String> contas) {
         return repository.findByIdIn(contas);
+    }
+
+    public List<ContaModelV2> buscarTudo(Example<ContaModelV2> example) {
+        return repository.findAll(example);
     }
 }

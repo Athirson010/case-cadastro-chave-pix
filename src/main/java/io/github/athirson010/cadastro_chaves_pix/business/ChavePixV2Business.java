@@ -18,6 +18,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
 
@@ -81,23 +82,13 @@ public class ChavePixV2Business {
         return ChaveMapper.of((ChaveModelV2) chaveServiceV2.update(id, chave), conta);
     }
 
-    public List<ContaResponseV2> buscarChaves(Example<ChaveModelV2> example) {
-        List<ChaveModelV2> chaves = chaveServiceV2.buscarTudo(example);
+    public List<ContaResponseV2> buscarChaves(Example<ChaveModelV2> exampleChave, Example<ContaModelV2> exampleConta) {
+        List<ChaveModelV2> chaves = chaveServiceV2.buscarTudo(exampleChave);
+        List<ContaModelV2> contas = contaServiceV2.buscarTudo(exampleConta);
 
-        List<String> contas = chaves
-                .stream()
-                .map(ChaveModelV2::getContaId)
-                .distinct()
-                .toList();
-
-        return contaServiceV2.buscarContasPorIds(contas)
-                .stream()
-                .map(contaModelV2 ->
-                        ContaV2Mapper
-                                .of(contaModelV2, chaves.stream()
-                                        .filter(chaveModelV2 ->
-                                                chaveModelV2.getContaId().equals(contaModelV2.getId()))
-                                        .toList()))
+        return contas.stream()
+                .map(contaModelV2 -> ContaV2Mapper.of(contaModelV2, chaves.stream()
+                        .filter(chaveModelV2 -> chaveModelV2.getContaId().equals(contaModelV2.getId())).toList()))
                 .toList();
     }
 }

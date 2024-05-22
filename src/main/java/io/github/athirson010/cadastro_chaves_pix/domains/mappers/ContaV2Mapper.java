@@ -1,6 +1,7 @@
 package io.github.athirson010.cadastro_chaves_pix.domains.mappers;
 
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.CadastroChavePixRequest;
+import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.FiltroChavePixRequest;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.v2.ChaveResponseV2;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.v2.ContaResponseV2;
 import io.github.athirson010.cadastro_chaves_pix.domains.models.ChaveModelV2;
@@ -28,6 +29,14 @@ public class ContaV2Mapper {
                 .nomeCorrentista(conta.getNomeCorrentista())
                 .tipoConta(conta.getTipoConta())
                 .chaves(chaveResponseV2s)
+                .build();
+    }
+
+    public static ContaModelV2 of(FiltroChavePixRequest request) {
+        return ContaModelV2.builder()
+                .nomeCorrentista(request.getNomeCorrentista())
+                .numeroAgencia(request.getAgencia())
+                .numeroConta(request.getConta())
                 .build();
     }
 }
