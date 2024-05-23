@@ -33,8 +33,8 @@ public class ChavePixBusiness {
     public CadastroChavePixResponse criarChaveComConta(CadastroChavePixRequest body) {
         resgatarTipoValidacao(body.getTipoChave())
                 .validarCaracteristicas(body.getValorChave())
-                .validarExistenciaChave(body.getValorChave(), chaveService)
-                .validarDadosConta(body.getNumeroAgencia(), body.getNumeroConta());
+                .validarDadosConta(body.getNumeroAgencia(), body.getNumeroConta())
+                .validarExistenciaChave(body.getValorChave(), chaveService);
 
         resgatarQuantidadeChavePorConta(body.getNumeroConta(), body.getNumeroAgencia(), body.getTipoPessoa());
 
