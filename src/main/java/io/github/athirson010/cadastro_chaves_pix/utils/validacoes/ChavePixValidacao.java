@@ -4,16 +4,22 @@ import io.github.athirson010.cadastro_chaves_pix.services.ChaveService;
 import io.github.athirson010.cadastro_chaves_pix.services.v2.ChaveServiceV2;
 
 public interface ChavePixValidacao {
+    ChavePixValidacao validarCaracteristicas(String valor);
 
-    ChavePixValidacao validarCaracteristicasChave(String valor);
-
-    default void validarExistenciaChave(String valor, ChaveService chaveService) {
+    default ChavePixValidacao validarExistenciaChave(String valor, ChaveService chaveService) {
         ValidacaoChave validacaoChave = new ValidacaoChave(chaveService);
         validacaoChave.validarExistencia(valor);
+        return this;
     }
 
-    default void validarExistenciaChave(String valor, ChaveServiceV2 chaveService) {
+    default ChavePixValidacao validarExistenciaChave(String valor, ChaveServiceV2 chaveService) {
         ValidacaoChave validacaoChave = new ValidacaoChave(chaveService);
         validacaoChave.validarExistencia(valor);
+        return this;
     }
+    default void validarDadosConta(String numeroAgencia, String numeroConta) {
+        ValidacaoChave.validarRegex("^\\d{1,4}$", numeroAgencia);
+        ValidacaoChave.validarRegex("^\\d{1,8}$", numeroConta);
+    }
+
 }

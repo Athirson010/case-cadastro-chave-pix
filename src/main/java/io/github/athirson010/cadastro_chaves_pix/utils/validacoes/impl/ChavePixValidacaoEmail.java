@@ -7,7 +7,7 @@ import static io.github.athirson010.cadastro_chaves_pix.utils.validacoes.Validac
 
 public class ChavePixValidacaoEmail implements ChavePixValidacao {
     @Override
-    public ChavePixValidacao validarCaracteristicasChave(String valor) {
+    public ChavePixValidacao validarCaracteristicas(String valor) {
         String regex = "^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]*[a-zA-Z0-9])?\\.[a-zA-Z]{2,}$";
         validarRegex(regex, valor);
         return this;

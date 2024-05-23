@@ -19,12 +19,9 @@ import org.springframework.data.domain.Example;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 import static io.github.athirson010.cadastro_chaves_pix.domains.enums.StatusChaveEnum.INATIVA;
 import static io.github.athirson010.cadastro_chaves_pix.domains.models.ChaveModelV2.filtrarIntervalosDatas;
@@ -41,8 +38,9 @@ public class ChavePixV2Business {
     @Transactional
     public CadastroChavePixResponse criarChaveComConta(CadastroChavePixRequest body) {
         resgatarTipoValidacao(body.getTipoChave())
-                .validarCaracteristicasChave(body.getValorChave())
-                .validarExistenciaChave(body.getValorChave(), chaveServiceV2);
+                .validarCaracteristicas(body.getValorChave())
+                .validarExistenciaChave(body.getValorChave(), chaveServiceV2)
+                .validarDadosConta(body.getNumeroAgencia(), body.getNumeroConta());
 
         resgatarQuantidadeChavePorConta(body.getNumeroConta(), body.getNumeroAgencia(), body.getTipoPessoa());
 
@@ -96,7 +94,7 @@ public class ChavePixV2Business {
     @Transactional
     public ContaResponseV2 atualizarChavePix(String id, AtualizarChavePixRequest body) {
         resgatarTipoValidacao(body.getTipoChave())
-                .validarCaracteristicasChave(body.getValorChave())
+                .validarCaracteristicas(body.getValorChave())
                 .validarExistenciaChave(body.getValorChave(), chaveServiceV2);
 
         ChaveModelV2 chave = (ChaveModelV2) chaveServiceV2.findById(id);

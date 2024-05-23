@@ -12,29 +12,29 @@ class ChavePixValidacaoAleatoriaTest {
     @Test
     public void testChaveValida() {
         String chaveValida = "zYxWvUtSrQpOnMlKjIhGfEdCbA1234567890";
-        Assertions.assertDoesNotThrow(() -> chavePixValidacaoAleatoria.validarCaracteristicasChave(chaveValida));
+        Assertions.assertDoesNotThrow(() -> chavePixValidacaoAleatoria.validarCaracteristicas(chaveValida));
     }
 
     @Test
     public void testChaveInvalidaCaracteresEspeciais() {
         String chaveInvalida = "zYxWvUtSrQpOnMlKjIhGfEdCbA123456!@#";
-        assertThrows(ValidacaoException.class, () -> chavePixValidacaoAleatoria.validarCaracteristicasChave(chaveInvalida));
+        assertThrows(ValidacaoException.class, () -> chavePixValidacaoAleatoria.validarCaracteristicas(chaveInvalida));
     }
 
     @Test
     public void testChaveInvalidaMenosDe36Caracteres() {
         String chaveInvalida = "zYxWvUtSrQpOnMlKjIhGfEdCbA12345";
-        assertThrows(ValidacaoException.class, () -> chavePixValidacaoAleatoria.validarCaracteristicasChave(chaveInvalida));
+        assertThrows(ValidacaoException.class, () -> chavePixValidacaoAleatoria.validarCaracteristicas(chaveInvalida));
     }
 
     @Test
     public void testChaveInvalidaMaisDe36Caracteres() {
         String chaveInvalida = "zYxWvUtSrQpOnMlKjIhGfEdCbA1234567890123456";
-        assertThrows(ValidacaoException.class, () -> chavePixValidacaoAleatoria.validarCaracteristicasChave(chaveInvalida));
+        assertThrows(ValidacaoException.class, () -> chavePixValidacaoAleatoria.validarCaracteristicas(chaveInvalida));
     }
 
     @Test
     public void testChaveVazia() {
-        assertThrows(ValidacaoException.class, () -> chavePixValidacaoAleatoria.validarCaracteristicasChave(""));
+        assertThrows(ValidacaoException.class, () -> chavePixValidacaoAleatoria.validarCaracteristicas(""));
     }
 }

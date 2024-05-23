@@ -12,42 +12,42 @@ class ChavePixValidacaoCPFTest {
     @Test
     public void testCPFValidoComPontuacao() {
         String cpfValido = "123.456.789-09";
-        assertDoesNotThrow(() -> chavePixValidacaoCPF.validarCaracteristicasChave(cpfValido));
+        assertDoesNotThrow(() -> chavePixValidacaoCPF.validarCaracteristicas(cpfValido));
     }
 
     @Test
     public void testCPFValidoSemPontuacao() {
         String cpfValido = "12345678909";
-        assertDoesNotThrow(() -> chavePixValidacaoCPF.validarCaracteristicasChave(cpfValido));
+        assertDoesNotThrow(() -> chavePixValidacaoCPF.validarCaracteristicas(cpfValido));
     }
 
     @Test
     public void testCPFInvalidoComPontuacaoErrada() {
         String cpfInvalido = "123.456.789/09";
-        assertThrows(ValidacaoException.class, () -> chavePixValidacaoCPF.validarCaracteristicasChave(cpfInvalido));
+        assertThrows(ValidacaoException.class, () -> chavePixValidacaoCPF.validarCaracteristicas(cpfInvalido));
     }
 
     @Test
     public void testCPFInvalidoMenosDe11Digitos() {
         String cpfInvalido = "1234567890";
-        assertThrows(ValidacaoException.class, () -> chavePixValidacaoCPF.validarCaracteristicasChave(cpfInvalido));
+        assertThrows(ValidacaoException.class, () -> chavePixValidacaoCPF.validarCaracteristicas(cpfInvalido));
     }
 
     @Test
     public void testCPFInvalidoMaisDe11Digitos() {
         String cpfInvalido = "123456789009";
-        assertThrows(ValidacaoException.class, () -> chavePixValidacaoCPF.validarCaracteristicasChave(cpfInvalido));
+        assertThrows(ValidacaoException.class, () -> chavePixValidacaoCPF.validarCaracteristicas(cpfInvalido));
     }
 
     @Test
     public void testCPFInvalidoComLetras() {
         String cpfInvalido = "123.456.789-0A";
-        assertThrows(ValidacaoException.class, () -> chavePixValidacaoCPF.validarCaracteristicasChave(cpfInvalido));
+        assertThrows(ValidacaoException.class, () -> chavePixValidacaoCPF.validarCaracteristicas(cpfInvalido));
     }
 
     @Test
     public void testCPFComDigitosRepetidos() {
         String cpfRepetido = "111.111.111-11";
-        assertThrows(ValidacaoException.class, () -> chavePixValidacaoCPF.validarCaracteristicasChave(cpfRepetido));
+        assertThrows(ValidacaoException.class, () -> chavePixValidacaoCPF.validarCaracteristicas(cpfRepetido));
     }
 }

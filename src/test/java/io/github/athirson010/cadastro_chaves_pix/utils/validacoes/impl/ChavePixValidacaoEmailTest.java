@@ -12,43 +12,43 @@ class ChavePixValidacaoEmailTest {
     @Test
     public void testEmailValidoSimples() {
         String emailValido = "test@example.com";
-        assertDoesNotThrow(() -> chavePixValidacaoEmail.validarCaracteristicasChave(emailValido));
+        assertDoesNotThrow(() -> chavePixValidacaoEmail.validarCaracteristicas(emailValido));
     }
 
     @Test
     public void testEmailValidoComNumeros() {
         String emailValido = "test123@example.com";
-        assertDoesNotThrow(() -> chavePixValidacaoEmail.validarCaracteristicasChave(emailValido));
+        assertDoesNotThrow(() -> chavePixValidacaoEmail.validarCaracteristicas(emailValido));
     }
 
     @Test
     public void testEmailValidoComPontos() {
         String emailValido = "first.last@example.com";
-        assertDoesNotThrow(() -> chavePixValidacaoEmail.validarCaracteristicasChave(emailValido));
+        assertDoesNotThrow(() -> chavePixValidacaoEmail.validarCaracteristicas(emailValido));
     }
 
     @Test
     public void testEmailValidoComSinais() {
         String emailValido = "user+mailbox/department=shipping@example.com";
-        assertDoesNotThrow(() -> chavePixValidacaoEmail.validarCaracteristicasChave(emailValido));
+        assertDoesNotThrow(() -> chavePixValidacaoEmail.validarCaracteristicas(emailValido));
     }
 
     @Test
     public void testEmailInvalido() {
         String emailInvalido = "test.example.com";
-        assertThrows(ValidacaoException.class, () -> chavePixValidacaoEmail.validarCaracteristicasChave(emailInvalido));
+        assertThrows(ValidacaoException.class, () -> chavePixValidacaoEmail.validarCaracteristicas(emailInvalido));
     }
 
     @Test
     public void testEmailInvalidoSemDominio() {
         String emailInvalido = "test@.com";
-        assertThrows(ValidacaoException.class, () -> chavePixValidacaoEmail.validarCaracteristicasChave(emailInvalido));
+        assertThrows(ValidacaoException.class, () -> chavePixValidacaoEmail.validarCaracteristicas(emailInvalido));
     }
 
     @Test
     public void testEmailInvalidoComEspacos() {
         String emailInvalido = "test @example.com";
-        assertThrows(ValidacaoException.class, () -> chavePixValidacaoEmail.validarCaracteristicasChave(emailInvalido));
+        assertThrows(ValidacaoException.class, () -> chavePixValidacaoEmail.validarCaracteristicas(emailInvalido));
     }
 
 }

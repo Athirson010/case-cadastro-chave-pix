@@ -12,7 +12,7 @@ class ChavePixValidacaoCelularTest {
     @Test
     public void testCelularValido() {
         String celular1 = "+55011912345678";
-        assertDoesNotThrow(() -> chavePixValidacaoCelular.validarCaracteristicasChave(celular1));
+        assertDoesNotThrow(() -> chavePixValidacaoCelular.validarCaracteristicas(celular1));
     }
 
     @Test
@@ -20,13 +20,13 @@ class ChavePixValidacaoCelularTest {
         String celular1 = "+55abc12345678";
         String celular2 = "123456789";
         String celular3 = "1234567890123456789";
-        assertThrows(ValidacaoException.class, () -> chavePixValidacaoCelular.validarCaracteristicasChave(celular1));
-        assertThrows(ValidacaoException.class, () -> chavePixValidacaoCelular.validarCaracteristicasChave(celular2));
-        assertThrows(ValidacaoException.class, () -> chavePixValidacaoCelular.validarCaracteristicasChave(celular3));
+        assertThrows(ValidacaoException.class, () -> chavePixValidacaoCelular.validarCaracteristicas(celular1));
+        assertThrows(ValidacaoException.class, () -> chavePixValidacaoCelular.validarCaracteristicas(celular2));
+        assertThrows(ValidacaoException.class, () -> chavePixValidacaoCelular.validarCaracteristicas(celular3));
     }
 
     @Test
     public void testCelularVazio() {
-        assertThrows(ValidacaoException.class, () -> chavePixValidacaoCelular.validarCaracteristicasChave(""));
+        assertThrows(ValidacaoException.class, () -> chavePixValidacaoCelular.validarCaracteristicas(""));
     }
 }

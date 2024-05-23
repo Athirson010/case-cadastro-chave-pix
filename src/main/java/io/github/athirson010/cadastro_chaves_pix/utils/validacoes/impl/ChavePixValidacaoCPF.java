@@ -8,7 +8,7 @@ import static io.github.athirson010.cadastro_chaves_pix.utils.validacoes.Validac
 
 public class ChavePixValidacaoCPF implements ChavePixValidacao {
     @Override
-    public ChavePixValidacao validarCaracteristicasChave(String valor) {
+    public ChavePixValidacao validarCaracteristicas(String valor) {
         String regex = "^\\d{3}\\.\\d{3}\\.\\d{3}-\\d{2}$";
         if (!valor.matches(regex)) {
             valor = valor.replaceAll("(\\d{3})(\\d{3})(\\d{3})(\\d{2})", "$1.$2.$3-$4");
