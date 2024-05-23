@@ -1,4 +1,5 @@
 services:
+  #Prisma
   sonar:
     image: sonarqube:latest
     ports:
@@ -31,4 +32,4 @@ services:
     ports:
       - "8080:8080"
     deploy:
-      replicas: 2
+      replicas: 1
