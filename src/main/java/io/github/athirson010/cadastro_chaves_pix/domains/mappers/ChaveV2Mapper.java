@@ -1,5 +1,6 @@
 package io.github.athirson010.cadastro_chaves_pix.domains.mappers;
 
+import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.AtualizarChavePixRequest;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.CadastroChavePixRequest;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.FiltroChavePixRequest;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.v2.ChaveResponseV2;
@@ -39,6 +40,15 @@ public class ChaveV2Mapper {
                 .dataInclusao(chaveModelV2.getDataInclusao())
                 .tipoChave(chaveModelV2.getTipoChave())
                 .valorChave(chaveModelV2.getValorChave())
+                .build();
+    }
+
+    public static ChaveModelV2 of(AtualizarChavePixRequest body) {
+        return ChaveModelV2.builder()
+                .tipoChave(body.getTipoChave() != null ? body.getTipoChave() : null)
+                .valorChave(body.getValorChave() != null ? body.getValorChave() : null)
+                .tipoChave(body.getTipoChave() != null ? body.getTipoChave() : null)
+                .dataInclusao(LocalDateTime.now())
                 .build();
     }
 }

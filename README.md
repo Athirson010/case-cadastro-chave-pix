@@ -88,4 +88,4 @@ taxa e resposta de 2s. Reduza a dependência com este serviço se possível.
   alterados,
   porém devidamente governados/auditados.
 
-  Utilizar Variáveis de ambientes em um security manager.
+      Utilizar Variáveis de ambientes em um security manager.

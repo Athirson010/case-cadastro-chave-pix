@@ -1,6 +1,7 @@
 package io.github.athirson010.cadastro_chaves_pix.controllers;
 
 import io.github.athirson010.cadastro_chaves_pix.business.ChavePixV2Business;
+import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.AtualizarChavePixRequest;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.CadastroChavePixRequest;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.FiltroChavePixRequest;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.CadastroChavePixResponse;
@@ -40,6 +41,12 @@ public class ChavesPixV2Controller {
     @ResponseStatus(HttpStatus.OK)
     public ChavePixResponse inativarChavePix(@PathVariable String id) {
         return business.inativarChavePix(id);
+    }
+
+    @PutMapping("/{id}")
+    public ContaResponseV2 atualizarChavePix(@Valid @RequestBody AtualizarChavePixRequest request,
+                                             @PathVariable String id) {
+        return business.atualizarChavePix(id, request);
     }
 
     @GetMapping

@@ -1,5 +1,6 @@
 package io.github.athirson010.cadastro_chaves_pix.domains.mappers;
 
+import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.AtualizarChavePixRequest;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.CadastroChavePixRequest;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.FiltroChavePixRequest;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.v2.ChaveResponseV2;
@@ -37,6 +38,20 @@ public class ContaV2Mapper {
                 .nomeCorrentista(request.getNomeCorrentista())
                 .numeroAgencia(request.getAgencia())
                 .numeroConta(request.getConta())
+                .build();
+    }
+
+    public static ContaModelV2 of(AtualizarChavePixRequest body) {
+        String nomeCorrentista;
+        nomeCorrentista = body.getNomeCorrentista() != null ? body.getNomeCorrentista() : "";
+        nomeCorrentista = nomeCorrentista.concat(body.getSobrenomeCorrentista() != null ? body.getSobrenomeCorrentista() : "");
+
+        return ContaModelV2
+                .builder()
+                .tipoConta(body.getTipoConta())
+                .numeroConta(body.getNumeroConta())
+                .numeroAgencia(body.getNumeroAgencia())
+                .nomeCorrentista(nomeCorrentista)
                 .build();
     }
 }

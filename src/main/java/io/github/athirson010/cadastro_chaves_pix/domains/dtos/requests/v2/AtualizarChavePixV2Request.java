@@ -1,18 +1,13 @@
-package io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests;
+package io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.v2;
 
-import io.github.athirson010.cadastro_chaves_pix.domains.enums.TipoChaveEnum;
 import io.github.athirson010.cadastro_chaves_pix.domains.enums.TipoContaEnum;
 import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.NotNull;
-import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.hibernate.validator.constraints.Length;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
-public class AtualizarChavePixRequest {
+public class AtualizarChavePixV2Request {
     @NotNull
     private TipoContaEnum tipoConta;
 
@@ -31,7 +26,4 @@ public class AtualizarChavePixRequest {
     @Length(max = 45)
     @Schema(example = "Candido")
     private String sobrenomeCorrentista;
-
-    private TipoChaveEnum tipoChave;
-    private String valorChave;
 }

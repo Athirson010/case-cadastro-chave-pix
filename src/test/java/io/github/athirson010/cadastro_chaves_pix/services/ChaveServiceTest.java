@@ -1,7 +1,8 @@
 package io.github.athirson010.cadastro_chaves_pix.services;
 
+import io.github.athirson010.cadastro_chaves_pix.dados.ChaveMassa;
 import io.github.athirson010.cadastro_chaves_pix.domains.enums.StatusChaveEnum;
-import io.github.athirson010.cadastro_chaves_pix.domains.enums.TipoPessoaEnum;
+import io.github.athirson010.cadastro_chaves_pix.domains.mappers.ChaveMapper;
 import io.github.athirson010.cadastro_chaves_pix.domains.models.ChaveModel;
 import io.github.athirson010.cadastro_chaves_pix.repository.ChaveRepository;
 import org.junit.jupiter.api.Test;
@@ -19,11 +20,12 @@ import static org.mockito.Mockito.when;
 class ChaveServiceTest {
     private final ChaveRepository repository = mock(ChaveRepository.class);
     private final ChaveService service = new ChaveService(repository);
+    ChaveModel chaveModel = ChaveMapper.of(ChaveMassa.cadastroChavePixRequest());
 
     @Test
     void testBuscarChavePorValorChaveAtiva() {
         String valorChave = "12345678909";
-        ChaveModel chaveModel = new ChaveModel();
+
         chaveModel.setStatus(StatusChaveEnum.ATIVA);
 
         when(repository.findByValorChaveAndStatus(valorChave, StatusChaveEnum.ATIVA))
@@ -48,7 +50,6 @@ class ChaveServiceTest {
     void testBuscarQuantidadeChavesAtivasPorNumeroContaENumeroAgencia() {
         String numeroConta = "12345";
         String numeroAgencia = "67890";
-        TipoPessoaEnum tipoPessoa = TipoPessoaEnum.FISICA;
         int expectedCount = 5;
 
         when(repository.countByNumeroContaAndNumeroAgenciaAndStatus(numeroConta, numeroAgencia, StatusChaveEnum.ATIVA))
@@ -60,13 +61,12 @@ class ChaveServiceTest {
 
     @Test
     void testBuscarTudo() {
-        ChaveModel exampleChaveModel = new ChaveModel();
-        Example<ChaveModel> example = Example.of(exampleChaveModel);
-        List<ChaveModel> expectedList = List.of(new ChaveModel(), new ChaveModel());
+        Example<ChaveModel> example = Example.of(chaveModel);
+        List<ChaveModel> listaEsperada = List.of(new ChaveModel(), new ChaveModel());
 
-        when(repository.findAll(example)).thenReturn(expectedList);
+        when(repository.findAll(example)).thenReturn(listaEsperada);
 
         List<ChaveModel> result = service.buscarTudo(example);
-        assertEquals(expectedList, result);
+        assertEquals(listaEsperada, result);
     }
 }

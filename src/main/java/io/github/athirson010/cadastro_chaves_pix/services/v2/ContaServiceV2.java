@@ -22,10 +22,6 @@ public class ContaServiceV2 extends AbstractService {
         return repository.findByNumeroContaAndNumeroAgencia(numeroConta, numeroAgencia);
     }
 
-    public List<ContaModelV2> buscarContasPorIds(List<String> contas) {
-        return repository.findByIdIn(contas);
-    }
-
     public List<ContaModelV2> buscarTudo(Example<ContaModelV2> example) {
         return repository.findAll(example);
     }
