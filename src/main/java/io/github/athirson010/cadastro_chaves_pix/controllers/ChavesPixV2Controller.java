@@ -49,24 +49,13 @@ public class ChavesPixV2Controller {
         return business.atualizarChavePix(id, request);
     }
 
+    //TODO retorno de 204, e um badrequest caso a request não seja valida.
     @GetMapping
     @ResponseStatus(HttpStatus.OK)
     public List<ContaResponseV2> buscarChaves(
             FiltroChavePixRequest request) {
 
-        if (request.getDataInclusao() != null & request.getDataInativacao() != null) {
-            throw new ValidacaoException("Não é permitido a combinacao de filtros. Data Inclusao & Data Inativacao");
-        }
-
-        if (request.getId() != null &&
-                (request.getTipoChave() != null ||
-                        request.getAgencia() != null ||
-                        request.getDataInclusao() != null ||
-                        request.getDataInativacao() != null ||
-                        request.getNomeCorrentista() != null ||
-                        request.getConta() != null)) {
-            throw new ValidacaoException("Não é permitido a combinacao de filtros. ID com outros filtros");
-        }
+        FiltroChavePixRequest.validarFiltro(request);
 
         ChaveModelV2 filtroChave = ChaveV2Mapper.of(request);
         ContaModelV2 filtroConta = ContaV2Mapper.of(request);

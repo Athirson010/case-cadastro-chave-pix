@@ -5,13 +5,16 @@ import io.github.athirson010.cadastro_chaves_pix.business.ChavePixV2Business;
 import io.github.athirson010.cadastro_chaves_pix.dados.ChaveMassa;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.AtualizarChavePixRequest;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.CadastroChavePixRequest;
+import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.FiltroChavePixRequest;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.CadastroChavePixResponse;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.v2.ContaResponseV2;
+import io.github.athirson010.cadastro_chaves_pix.domains.enums.TipoChaveEnum;
 import io.github.athirson010.cadastro_chaves_pix.domains.mappers.ChaveMapper;
 import io.github.athirson010.cadastro_chaves_pix.domains.mappers.ChaveV2Mapper;
 import io.github.athirson010.cadastro_chaves_pix.domains.mappers.ContaV2Mapper;
 import io.github.athirson010.cadastro_chaves_pix.domains.models.ChaveModelV2;
 import io.github.athirson010.cadastro_chaves_pix.domains.models.ContaModelV2;
+import io.github.athirson010.cadastro_chaves_pix.exceptions.ValidacaoException;
 import io.github.athirson010.cadastro_chaves_pix.utils.AbstractModel;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,8 +26,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -87,28 +93,41 @@ class ChavesPixV2ControllerTest {
                         .content(objectMapper.writeValueAsString(request)))
                 .andExpect(status().isOk());
     }
-//
-//    @Test
-//    public void testBuscarChaves() throws Exception {
-//        List<ContaResponseV2> response = new ArrayList<>();
-//
-//        when(business.buscarChaves(any(), any())).thenReturn(response);
-//
-//        mockMvc.perform(get("/v2/chave-pix")
-//                        .param("id", "test-id"))
-//                .andExpect(status().isOk())
-//                .andExpect(content().json("[]"));
-//    }
-//
-//    @Test
-//    public void testBuscarChavesComValidacaoException() throws Exception {
-//        FiltroChavePixRequest request = new FiltroChavePixRequest();
-//        request.setDataInclusao("2023-01-01");
-//        request.setDataInativacao("2023-01-02");
-//
-//        mockMvc.perform(get("/v2/chave-pix")
-//                        .param("dataInclusao", "2023-01-01")
-//                        .param("dataInativacao", "2023-01-02"))
-//                .andExpect(status().isBadRequest());
-//    }
+
+    @Test
+    public void testBuscarChaves() throws Exception {
+        List<ContaResponseV2> response = new ArrayList<>();
+
+        when(business.buscarChaves(any(), any())).thenReturn(response);
+
+        mockMvc.perform(get("/v2/chave-pix")
+                        .param("id", "test-id"))
+                .andExpect(status().isOk());
+    }
+
+    @Test
+    public void testBuscarChavesComValidacaoException() throws Exception {
+        FiltroChavePixRequest request = new FiltroChavePixRequest();
+        request.setDataInclusao(LocalDate.now());
+        request.setDataInativacao(LocalDate.now());
+
+        mockMvc.perform(get("/v2/chave-pix")
+                        .param("dataInclusao", "2023-01-01")
+                        .param("dataInativacao", "2023-01-02"))
+                .andExpect(status().isUnprocessableEntity());
+    }
+
+    @Test
+    void testBuscarChavesIdComOutroFiltro() {
+        FiltroChavePixRequest request = new FiltroChavePixRequest();
+        request.setId("1");
+        request.setTipoChave(TipoChaveEnum.CPF);
+        request.setDataInativacao(LocalDate.now());
+
+        ValidacaoException exception = assertThrows(ValidacaoException.class, () -> {
+            controller.buscarChaves(request);
+        });
+
+        assertEquals("422 UNPROCESSABLE_ENTITY", exception.getMessage());
+    }
 }

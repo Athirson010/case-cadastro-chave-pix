@@ -57,19 +57,7 @@ public class ChavesPixController {
     public List<ChavePixResponse> buscarChaves(
             FiltroChavePixRequest request) {
 
-        if (request.getDataInclusao() != null & request.getDataInativacao() != null) {
-            throw new ValidacaoException("Não é permitido a combinacao de filtros. Data Inclusao & Data Inativacao");
-        }
-
-        if (request.getId() != null &&
-                (request.getTipoChave() != null ||
-                        request.getAgencia() != null ||
-                        request.getDataInclusao() != null ||
-                        request.getDataInativacao() != null ||
-                        request.getNomeCorrentista() != null ||
-                        request.getConta() != null)) {
-            throw new ValidacaoException("Não é permitido a combinacao de filtros. ID com outros filtros");
-        }
+        FiltroChavePixRequest.validarFiltro(request);
 
         ChaveModel filtro = ChaveMapper.of(request);
 

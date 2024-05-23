@@ -5,24 +5,30 @@ import io.github.athirson010.cadastro_chaves_pix.business.ChavePixBusiness;
 import io.github.athirson010.cadastro_chaves_pix.dados.ChaveMassa;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.AtualizarChavePixRequest;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.CadastroChavePixRequest;
+import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.FiltroChavePixRequest;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.CadastroChavePixResponse;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.ChavePixResponse;
+import io.github.athirson010.cadastro_chaves_pix.domains.enums.TipoChaveEnum;
 import io.github.athirson010.cadastro_chaves_pix.domains.enums.TipoContaEnum;
 import io.github.athirson010.cadastro_chaves_pix.domains.mappers.ChaveMapper;
 import io.github.athirson010.cadastro_chaves_pix.domains.models.ChaveModel;
+import io.github.athirson010.cadastro_chaves_pix.exceptions.ValidacaoException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.Example;
+import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
+import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -110,5 +116,58 @@ class ChavesPixControllerTest {
 
         verify(business, times(0)).buscarChaves(any(Example.class));
     }
+    @Test
+    void testBuscarChavesDataInclusaoAndDataInativacao() {
+        FiltroChavePixRequest request = new FiltroChavePixRequest();
+        request.setDataInclusao(LocalDate.now());
+        request.setDataInativacao(LocalDate.now());
+
+        ValidacaoException exception = assertThrows(ValidacaoException.class, () -> {
+            controller.buscarChaves(request);
+        });
+
+        assertEquals("422 UNPROCESSABLE_ENTITY", exception.getMessage());
+    }
+
+    @Test
+    void testBuscarChavesIdComOutroFiltro() {
+        FiltroChavePixRequest request = new FiltroChavePixRequest();
+        request.setId("1");
+        request.setTipoChave(TipoChaveEnum.CPF);
+        request.setDataInativacao(LocalDate.now());
+
+        ValidacaoException exception = assertThrows(ValidacaoException.class, () -> {
+            controller.buscarChaves(request);
+        });
+
+        assertEquals("422 UNPROCESSABLE_ENTITY", exception.getMessage());
+    }
+
+
+    @Test
+    void testBuscarChavesSuccess() {
+        FiltroChavePixRequest request = new FiltroChavePixRequest();
+        request.setNomeCorrentista("John Doe");
+
+        ChaveModel filtro = new ChaveModel();
+        filtro.setNomeCorrentista("John Doe");
+
+        Example<ChaveModel> example = Example.of(filtro,
+                ExampleMatcher.matchingAll()
+                        .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)
+                        .withIgnoreNullValues()
+                        .withIgnorePaths("dataInclusao", "dataInativacao")
+                        .withIgnoreCase());
+
+        List<ChavePixResponse> expectedResponse = List.of(new ChavePixResponse());
+        when(business.buscarChaves(example)).thenReturn(expectedResponse);
+
+        List<ChavePixResponse> response = controller.buscarChaves(request);
+
+        assertNotNull(response);
+        assertEquals(expectedResponse.size(), response.size());
+        verify(business, times(1)).buscarChaves(example);
+    }
+
 
 }

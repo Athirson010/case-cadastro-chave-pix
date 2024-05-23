@@ -99,6 +99,7 @@ public class ChavePixV2Business {
         return resultado;
     }
 
+    //TODO Revisar para fazer direto com a query
     private List<ChaveModelV2> filtrarIntervalosDatas(List<ChaveModelV2> chaves, ChaveModelV2 filtro) {
         if (filtro.getDataInclusao() != null) {
             LocalDateTime inclusaoComeco = filtro.getDataInclusao();

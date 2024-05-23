@@ -76,6 +76,7 @@ public class ChavePixBusiness {
         return chaves.stream().map(ChaveMapper::of).toList();
     }
 
+    //TODO Revisar para fazer direto com a query
     private List<ChaveModel> filtrarIntervalosDatas(List<ChaveModel> chaves, ChaveModel filtro) {
 
         if (filtro.getDataInclusao() != null) {

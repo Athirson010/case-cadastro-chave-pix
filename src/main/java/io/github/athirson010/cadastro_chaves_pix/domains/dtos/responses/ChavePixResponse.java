@@ -5,12 +5,14 @@ import io.github.athirson010.cadastro_chaves_pix.domains.enums.TipoContaEnum;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @AllArgsConstructor
 @Data
 @Builder
+@NoArgsConstructor
 public class ChavePixResponse {
     private String id;
     private TipoChaveEnum tipoChave;
