@@ -7,8 +7,9 @@ import static io.github.athirson010.cadastro_chaves_pix.utils.validacoes.Validac
 public class ChavePixValidacaoCelular implements ChavePixValidacao {
     @Override
     public ChavePixValidacao validarCaracteristicas(String valor) {
-        String regex = "^\\+(?:[1-9][0-9])?(?:\\d{3})?\\d{9}$";
+        String regex = "^\\+55\\d{12}$";
         validarRegex(regex, valor);
         return this;
     }
 }
+
