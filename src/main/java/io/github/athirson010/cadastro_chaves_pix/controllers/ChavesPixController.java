@@ -6,6 +6,7 @@ import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.CadastroC
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.FiltroChavePixRequest;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.CadastroChavePixResponse;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.ChavePixResponse;
+import io.github.athirson010.cadastro_chaves_pix.domains.enums.StatusChaveEnum;
 import io.github.athirson010.cadastro_chaves_pix.domains.mappers.ChaveMapper;
 import io.github.athirson010.cadastro_chaves_pix.domains.models.ChaveModel;
 import io.github.athirson010.cadastro_chaves_pix.exceptions.ValidacaoException;
@@ -17,6 +18,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+
+import static io.github.athirson010.cadastro_chaves_pix.domains.enums.StatusChaveEnum.ATIVA;
 
 @RequestMapping(value = "/v1/chave-pix")
 @Tag(name = "V1")
@@ -60,6 +63,8 @@ public class ChavesPixController {
         FiltroChavePixRequest.validarFiltro(request);
 
         ChaveModel filtro = ChaveMapper.of(request);
+
+        filtro.setStatus(ATIVA);
 
         Example<ChaveModel> example = Example.of(filtro,
                 ExampleMatcher.matchingAll()
