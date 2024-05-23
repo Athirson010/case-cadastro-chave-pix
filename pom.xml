@@ -6,7 +6,7 @@
         <groupId>org.springframework.boot</groupId>
         <artifactId>spring-boot-starter-parent</artifactId>
         <version>3.2.5</version>
-        <relativePath/> <!-- lookup parent from repository -->
+        <relativePath/>
     </parent>
     <groupId>io.github.athirson010</groupId>
     <artifactId>cadastro-de-chaves-pix</artifactId>
@@ -20,8 +20,10 @@
         <sonar.java.target>17</sonar.java.target>
         <sonar.host.url>http://localhost:9000</sonar.host.url>
         <sonar.login>sqa_0155cbdecb4507c3a36dbccb7be37f66fbe5a7e4</sonar.login>
-        <additionalTestArgLine/>
-    </properties>
+        <jacoco.version>0.8.8</jacoco.version>
+        <sonar.java.binaries>${project.basedir}/src/main</sonar.java.binaries>
+        <sonar.java.test.binaries>${project.basedir}/src/test</sonar.java.test.binaries>
+      </properties>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -108,5 +110,4 @@
         </plugins>
         <finalName>cadastro-de-chaves-pix-service</finalName>
     </build>
-
 </project>
