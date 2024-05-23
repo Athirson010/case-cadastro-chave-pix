@@ -6,7 +6,11 @@ import io.github.athirson010.cadastro_chaves_pix.utils.AbstractModel;
 import lombok.*;
 import org.springframework.data.mongodb.core.mapping.Document;
 
+import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Document("chaveV2")
 @Data
@@ -21,4 +25,30 @@ public class ChaveModelV2 extends AbstractModel {
     private StatusChaveEnum status;
     private TipoChaveEnum tipoChave;
     private String contaId;
+
+    //TODO Revisar para fazer direto com a query
+    public static List<ChaveModelV2> filtrarIntervalosDatas(List<ChaveModelV2> chaves, ChaveModelV2 filtro) {
+        if (filtro.getDataInclusao() != null) {
+            LocalDateTime inclusaoComeco = filtro.getDataInclusao();
+            LocalDateTime inclusaoFinal = LocalDateTime.of(LocalDate.from(filtro.getDataInclusao()), LocalTime.MAX);
+
+            return chaves.stream()
+                    .filter(chave -> chave.getDataInclusao() != null &&
+                            !chave.getDataInclusao().isBefore(inclusaoComeco) &&
+                            !chave.getDataInclusao().isAfter(inclusaoFinal))
+                    .collect(Collectors.toList());
+        }
+        if (filtro.getDataInativacao() != null) {
+            LocalDateTime inclusaoComeco = filtro.getDataInativacao();
+            LocalDateTime inclusaoFinal = LocalDateTime.of(LocalDate.from(filtro.getDataInativacao()), LocalTime.MAX);
+
+            return chaves.stream()
+                    .filter(chave -> chave.getDataInclusao() != null &&
+                            !chave.getDataInativacao().isBefore(inclusaoComeco) &&
+                            !chave.getDataInativacao().isAfter(inclusaoFinal))
+                    .collect(Collectors.toList());
+        }
+        return chaves;
+    }
+
 }

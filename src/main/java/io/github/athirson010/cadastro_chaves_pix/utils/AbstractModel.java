@@ -18,4 +18,5 @@ public class AbstractModel {
 
     @LastModifiedDate
     private LocalDate ultimaAtualizacao;
+
 }

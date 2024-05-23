@@ -21,6 +21,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static io.github.athirson010.cadastro_chaves_pix.domains.enums.StatusChaveEnum.INATIVA;
+import static io.github.athirson010.cadastro_chaves_pix.domains.models.ChaveModel.filtrarIntervalosDatas;
 import static io.github.athirson010.cadastro_chaves_pix.utils.validacoes.ValidacaoChave.resgatarTipoValidacao;
 
 @Service
@@ -74,32 +75,6 @@ public class ChavePixBusiness {
         }
 
         return chaves.stream().map(ChaveMapper::of).toList();
-    }
-
-    //TODO Revisar para fazer direto com a query
-    private List<ChaveModel> filtrarIntervalosDatas(List<ChaveModel> chaves, ChaveModel filtro) {
-
-        if (filtro.getDataInclusao() != null) {
-            LocalDateTime inclusaoComeco = filtro.getDataInclusao();
-            LocalDateTime inclusaoFinal = LocalDateTime.of(LocalDate.from(filtro.getDataInclusao()), LocalTime.MAX);
-
-            return chaves.stream()
-                    .filter(chave -> chave.getDataInclusao() != null &&
-                            !chave.getDataInclusao().isBefore(inclusaoComeco) &&
-                            !chave.getDataInclusao().isAfter(inclusaoFinal))
-                    .collect(Collectors.toList());
-        }
-        if (filtro.getDataInativacao() != null) {
-            LocalDateTime inclusaoComeco = filtro.getDataInativacao();
-            LocalDateTime inclusaoFinal = LocalDateTime.of(LocalDate.from(filtro.getDataInativacao()), LocalTime.MAX);
-
-            return chaves.stream()
-                    .filter(chave -> chave.getDataInclusao() != null &&
-                            !chave.getDataInativacao().isBefore(inclusaoComeco) &&
-                            !chave.getDataInativacao().isAfter(inclusaoFinal))
-                    .collect(Collectors.toList());
-        }
-        return chaves;
     }
 
     public ChaveModel atualizar(String id, AtualizarChavePixRequest request) {
