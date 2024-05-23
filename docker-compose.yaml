@@ -32,9 +32,9 @@ services:
   app:
     image: case:v1
     environment:
-        SPRING_DATA_MONGODB_HOST: mongo
-        SPRING_DATA_MONGODB_PORT: 27017
-        SPRING_DATA_MONGODB_DATABASE: bd-chave-pix
+      SPRING_DATA_MONGODB_HOST: mongo
+      SPRING_DATA_MONGODB_PORT: 27017
+      SPRING_DATA_MONGODB_DATABASE: bd-chave-pix
     ports:
       - "8080:8080"
     deploy:

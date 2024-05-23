@@ -12,7 +12,7 @@ public class ChaveMassa {
     static String NOME_CORRENTISTA = "TESTE";
     static String SOBRENOME_CORRENTISTA = "V2";
     static String NUMERO_AGENCIA = "1234";
-    static String NUMERO_CONTA = "1234";
+    static String NUMERO_CONTA = "12345678";
 
     public static CadastroChavePixRequest cadastroChavePixRequest() {
         return new CadastroChavePixRequest(TipoChaveEnum.CPF, CPF,

@@ -7,7 +7,6 @@ import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.Cadastro
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.ChavePixResponse;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.v2.ContaResponseV2;
 import io.github.athirson010.cadastro_chaves_pix.domains.enums.StatusChaveEnum;
-import io.github.athirson010.cadastro_chaves_pix.domains.enums.TipoChaveEnum;
 import io.github.athirson010.cadastro_chaves_pix.domains.mappers.ChaveMapper;
 import io.github.athirson010.cadastro_chaves_pix.domains.mappers.ChaveV2Mapper;
 import io.github.athirson010.cadastro_chaves_pix.domains.mappers.ContaV2Mapper;
@@ -16,7 +15,6 @@ import io.github.athirson010.cadastro_chaves_pix.domains.models.ChaveModelV2;
 import io.github.athirson010.cadastro_chaves_pix.domains.models.ContaModelV2;
 import io.github.athirson010.cadastro_chaves_pix.exceptions.NaoEncontradoException;
 import io.github.athirson010.cadastro_chaves_pix.exceptions.ValidacaoException;
-import io.github.athirson010.cadastro_chaves_pix.services.ChaveService;
 import io.github.athirson010.cadastro_chaves_pix.services.v2.ChaveServiceV2;
 import io.github.athirson010.cadastro_chaves_pix.services.v2.ContaServiceV2;
 import io.github.athirson010.cadastro_chaves_pix.utils.AbstractModel;
@@ -32,7 +30,8 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.when;
@@ -50,9 +49,11 @@ class ChavePixV2BusinessTest {
     ChaveModel chaveModel;
     ContaModelV2 contaModelV2;
     static String ID = "10";
+
     public ChavePixV2BusinessTest() {
         MockitoAnnotations.initMocks(this);
     }
+
     @BeforeEach
     public void setup() {
         cadastroChavePixRequest = ChaveMassa.cadastroChavePixRequest();
@@ -61,6 +62,7 @@ class ChavePixV2BusinessTest {
         chaveModel = ChaveMapper.of(cadastroChavePixRequest);
         contaModelV2 = ContaV2Mapper.of(cadastroChavePixRequest);
     }
+
     @Test
     public void testCriarChaveComConta() {
         chaveModel.setId(ID);
@@ -130,6 +132,7 @@ class ChavePixV2BusinessTest {
 
         assertEquals(ID, actualResponse.getId());
     }
+
     @Test
     void testBuscarChavesErroNaoEncontrado() {
         when(chaveServiceMock.findById(anyString()))

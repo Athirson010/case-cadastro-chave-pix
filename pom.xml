@@ -23,7 +23,7 @@
         <jacoco.version>0.8.8</jacoco.version>
         <sonar.java.binaries>${project.basedir}/src/main</sonar.java.binaries>
         <sonar.java.test.binaries>${project.basedir}/src/test</sonar.java.test.binaries>
-      </properties>
+    </properties>
     <dependencies>
         <dependency>
             <groupId>org.springframework.boot</groupId>

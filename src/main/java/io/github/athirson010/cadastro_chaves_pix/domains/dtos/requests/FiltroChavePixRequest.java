@@ -32,7 +32,7 @@ public class FiltroChavePixRequest {
     @Schema(example = "10/05/2024")
     private LocalDate dataInativacao;
 
-    public static void validarFiltro(FiltroChavePixRequest request){
+    public static void validarFiltro(FiltroChavePixRequest request) {
         if (request.getDataInclusao() != null & request.getDataInativacao() != null) {
             throw new ValidacaoException("Não é permitido a combinacao de filtros. Data Inclusao & Data Inativacao");
         }

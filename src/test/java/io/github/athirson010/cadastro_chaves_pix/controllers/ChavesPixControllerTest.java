@@ -50,6 +50,7 @@ class ChavesPixControllerTest {
         MockitoAnnotations.openMocks(this);
         mockMvc = MockMvcBuilders.standaloneSetup(controller).build();
     }
+
     @Test
     public void testCadastrarChavePix() throws Exception {
         when(business.criarChaveComConta(any(CadastroChavePixRequest.class))).thenReturn(respostaID);
@@ -116,6 +117,7 @@ class ChavesPixControllerTest {
 
         verify(business, times(0)).buscarChaves(any(Example.class));
     }
+
     @Test
     void testBuscarChavesDataInclusaoAndDataInativacao() {
         FiltroChavePixRequest request = new FiltroChavePixRequest();
@@ -142,6 +144,7 @@ class ChavesPixControllerTest {
 
         assertEquals("422 UNPROCESSABLE_ENTITY", exception.getMessage());
     }
+
     @Test
     void testBuscarChavesSuccess() {
         FiltroChavePixRequest request = new FiltroChavePixRequest();

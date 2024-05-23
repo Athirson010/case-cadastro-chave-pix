@@ -1,7 +1,6 @@
 package io.github.athirson010.cadastro_chaves_pix.business;
 
 import io.github.athirson010.cadastro_chaves_pix.dados.ChaveMassa;
-import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.AtualizarChavePixRequest;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.CadastroChavePixRequest;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.CadastroChavePixResponse;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.ChavePixResponse;
@@ -18,13 +17,14 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
-import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.*;
+import static org.mockito.Mockito.anyString;
+import static org.mockito.Mockito.when;
 
 class ChavePixBusinessTest {
     @Mock
@@ -34,14 +34,17 @@ class ChavePixBusinessTest {
     CadastroChavePixRequest request;
     ChaveModel chaveModel;
     static String ID = "10";
+
     public ChavePixBusinessTest() {
         MockitoAnnotations.initMocks(this);
     }
+
     @BeforeEach
     public void setup() {
         request = ChaveMassa.cadastroChavePixRequest();
         chaveModel = ChaveMapper.of(request);
     }
+
     @Test
     void testBuscarContaPorId() {
         chaveModel.setId(ID);
@@ -51,6 +54,7 @@ class ChavePixBusinessTest {
         ChavePixResponse actualResponse = chavePixBusiness.buscarPorId(ID);
         assertEquals(ID, actualResponse.getId());
     }
+
     @Test
     public void testCriarChaveComConta() {
         chaveModel.setId(ID);
@@ -102,6 +106,7 @@ class ChavePixBusinessTest {
 
         assertEquals(ID, actualResponse.getId());
     }
+
     @Test
     void testBuscarChavesErroNaoEncontrado() {
         when(chaveServiceMock.findById(anyString()))
@@ -120,6 +125,7 @@ class ChavePixBusinessTest {
 
         assertEquals("404 NOT_FOUND \"Chaves não encontrado!\"", exception.getMessage());
     }
+
     @Test
     void testBuscarChavesSucesso() {
         chaveModel = new ChaveModel();
@@ -141,6 +147,7 @@ class ChavePixBusinessTest {
 
         assertEquals(1, chavePixResponses.size());
     }
+
     @Test
     void testAtualizarChave() {
         when(chaveServiceMock.update(any(), any()))

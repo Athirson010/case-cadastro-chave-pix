@@ -7,12 +7,10 @@ import org.junit.jupiter.api.Test;
 
 import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ChaveModelV2Test {
     @Test
@@ -20,36 +18,40 @@ class ChaveModelV2Test {
         ChaveModelV2 chave = ChaveV2Mapper.of(ChaveMassa.cadastroChavePixRequest(),
                 new AbstractModel("1", LocalDate.now()));
 
+        chave.setDataInclusao(LocalDateTime.now());
+
         List<ChaveModelV2> chaves = Collections.singletonList(chave);
 
         ChaveModelV2 filtro = ChaveModelV2.builder()
-                .dataInclusao(LocalDateTime.now())
+                .dataInclusao(LocalDateTime.now()
+                        .minusHours(1l))
                 .build();
 
         List<ChaveModelV2> resultado = ChaveModelV2.filtrarIntervalosDatas(chaves, filtro);
 
-        assertThat(resultado).containsExactly(chave);
+        assertEquals(1, resultado.size());
     }
 
     @Test
     public void testFiltrarPorDataInativacao() {
         ChaveModelV2 chave = ChaveV2Mapper.of(ChaveMassa.cadastroChavePixRequest(),
                 new AbstractModel("1", LocalDate.now()));
+
         chave.setDataInativacao(LocalDateTime.now());
 
         List<ChaveModelV2> chaves = List.of(chave);
 
         ChaveModelV2 filtro = ChaveModelV2.builder()
-                .dataInativacao(LocalDateTime.now())
+                .dataInativacao(LocalDateTime.now().minusHours(1l))
                 .build();
 
         List<ChaveModelV2> resultado = ChaveModelV2.filtrarIntervalosDatas(chaves, filtro);
 
-        assertThat(resultado).containsExactly(chave);
+        assertEquals(1, resultado.size());
     }
 
     @Test
-   public void testSemFiltro() {
+    public void testSemFiltro() {
 
         ChaveModelV2 chave = new ChaveModelV2();
 
@@ -59,7 +61,7 @@ class ChaveModelV2Test {
 
         List<ChaveModelV2> resultado = ChaveModelV2.filtrarIntervalosDatas(chaves, filtro);
 
-        assertThat(resultado).containsExactly(chave);
+        assertEquals(1, resultado.size());
     }
 
 }

@@ -6,10 +6,8 @@ import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.CadastroC
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.FiltroChavePixRequest;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.CadastroChavePixResponse;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.ChavePixResponse;
-import io.github.athirson010.cadastro_chaves_pix.domains.enums.StatusChaveEnum;
 import io.github.athirson010.cadastro_chaves_pix.domains.mappers.ChaveMapper;
 import io.github.athirson010.cadastro_chaves_pix.domains.models.ChaveModel;
-import io.github.athirson010.cadastro_chaves_pix.exceptions.ValidacaoException;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Example;

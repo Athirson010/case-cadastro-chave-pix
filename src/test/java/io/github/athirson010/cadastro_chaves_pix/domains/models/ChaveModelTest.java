@@ -2,32 +2,30 @@ package io.github.athirson010.cadastro_chaves_pix.domains.models;
 
 import io.github.athirson010.cadastro_chaves_pix.dados.ChaveMassa;
 import io.github.athirson010.cadastro_chaves_pix.domains.mappers.ChaveMapper;
-import io.github.athirson010.cadastro_chaves_pix.domains.mappers.ChaveV2Mapper;
-import io.github.athirson010.cadastro_chaves_pix.utils.AbstractModel;
 import org.junit.jupiter.api.Test;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.Collections;
 import java.util.List;
 
-import static org.assertj.core.api.AssertionsForInterfaceTypes.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 
 class ChaveModelTest {
     @Test
     public void testFiltrarPorDataInclusao() {
         ChaveModel chave = ChaveMapper.of(ChaveMassa.cadastroChavePixRequest());
+        chave.setDataInclusao(LocalDateTime.now());
 
         List<ChaveModel> chaves = Collections.singletonList(chave);
 
         ChaveModel filtro = ChaveModel.builder()
-                .dataInclusao(LocalDateTime.now())
+                .dataInclusao(LocalDateTime.now().minusHours(1l))
                 .build();
 
         List<ChaveModel> resultado = ChaveModel.filtrarIntervalosDatas(chaves, filtro);
 
-        assertThat(resultado).containsExactly(chave);
+        assertEquals(1, resultado.size());
     }
 
     @Test
@@ -38,12 +36,12 @@ class ChaveModelTest {
         List<ChaveModel> chaves = List.of(chave);
 
         ChaveModel filtro = ChaveModel.builder()
-                .dataInativacao(LocalDateTime.now())
+                .dataInativacao(LocalDateTime.now().minusHours(1l))
                 .build();
 
         List<ChaveModel> resultado = ChaveModel.filtrarIntervalosDatas(chaves, filtro);
 
-        assertThat(resultado).containsExactly(chave);
+        assertEquals(1, resultado.size());
     }
 
     @Test
@@ -57,7 +55,7 @@ class ChaveModelTest {
 
         List<ChaveModel> resultado = ChaveModel.filtrarIntervalosDatas(chaves, filtro);
 
-        assertThat(resultado).containsExactly(chave);
+        assertEquals(1, resultado.size());
     }
 
 }

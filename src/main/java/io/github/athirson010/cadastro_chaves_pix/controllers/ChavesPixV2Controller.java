@@ -12,7 +12,6 @@ import io.github.athirson010.cadastro_chaves_pix.domains.mappers.ChaveV2Mapper;
 import io.github.athirson010.cadastro_chaves_pix.domains.mappers.ContaV2Mapper;
 import io.github.athirson010.cadastro_chaves_pix.domains.models.ChaveModelV2;
 import io.github.athirson010.cadastro_chaves_pix.domains.models.ContaModelV2;
-import io.github.athirson010.cadastro_chaves_pix.exceptions.ValidacaoException;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.data.domain.Example;

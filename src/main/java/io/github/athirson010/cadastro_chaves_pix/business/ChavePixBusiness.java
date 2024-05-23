@@ -42,6 +42,7 @@ public class ChavePixBusiness {
 
         return new CadastroChavePixResponse(chaveService.save(chave).getId());
     }
+
     private void resgatarQuantidadeChavePorConta(String numeroConta, String numeroAgencia, TipoPessoaEnum tipoPessoa) {
         if (chaveService.buscarQuantidadeChavesAtivasPorNumeroContaENumeroAgencia(numeroConta, numeroAgencia) >= tipoPessoa.getLimitePermitido()) {
             throw new ValidacaoException("Limite de chaves atingido");

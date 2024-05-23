@@ -39,13 +39,13 @@ public class ChaveModelV2 extends AbstractModel {
                     .collect(Collectors.toList());
         }
         if (filtro.getDataInativacao() != null) {
-            LocalDateTime inclusaoComeco = filtro.getDataInativacao();
-            LocalDateTime inclusaoFinal = LocalDateTime.of(LocalDate.from(filtro.getDataInativacao()), LocalTime.MAX);
+            LocalDateTime inativacaoComeco = filtro.getDataInativacao();
+            LocalDateTime inativacaoFinal = LocalDateTime.of(LocalDate.from(filtro.getDataInativacao()), LocalTime.MAX);
 
             return chaves.stream()
                     .filter(chave -> chave.getDataInclusao() != null &&
-                            !chave.getDataInativacao().isBefore(inclusaoComeco) &&
-                            !chave.getDataInativacao().isAfter(inclusaoFinal))
+                            !chave.getDataInativacao().isBefore(inativacaoComeco) &&
+                            !chave.getDataInativacao().isAfter(inativacaoFinal))
                     .collect(Collectors.toList());
         }
         return chaves;
