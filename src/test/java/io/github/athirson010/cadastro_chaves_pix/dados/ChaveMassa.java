@@ -8,12 +8,11 @@ import io.github.athirson010.cadastro_chaves_pix.domains.enums.TipoContaEnum;
 import static io.github.athirson010.cadastro_chaves_pix.domains.enums.TipoPessoaEnum.FISICA;
 
 public class ChaveMassa {
-    static String CPF = "4827447841";
+    static String CPF = "48274467841";
     static String NOME_CORRENTISTA = "TESTE";
     static String SOBRENOME_CORRENTISTA = "V2";
     static String NUMERO_AGENCIA = "1234";
     static String NUMERO_CONTA = "1234";
-
 
     public static CadastroChavePixRequest cadastroChavePixRequest() {
         return new CadastroChavePixRequest(TipoChaveEnum.CPF, CPF,
