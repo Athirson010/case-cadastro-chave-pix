@@ -19,6 +19,7 @@ services:
       - "5432:5432"
     environment:
       POSTGRES_PASSWORD: sonar
+
   mongo:
     container_name: mongo
     image: mongo:latest
@@ -27,8 +28,13 @@ services:
       - 'PATH=/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin'
     ports:
       - "27017:27017"
+
   app:
     image: case:v1
+    environment:
+        SPRING_DATA_MONGODB_HOST: mongo
+        SPRING_DATA_MONGODB_PORT: 27017
+        SPRING_DATA_MONGODB_DATABASE: bd-chave-pix
     ports:
       - "8080:8080"
     deploy:

@@ -34,12 +34,10 @@ import static io.github.athirson010.cadastro_chaves_pix.utils.validacoes.Validac
 public class ChavePixV2Business {
     private final ChaveServiceV2 chaveServiceV2;
     private final ContaServiceV2 contaServiceV2;
-
     public ChavePixV2Business(ChaveServiceV2 chaveServiceV2, ContaServiceV2 contaServiceV2) {
         this.chaveServiceV2 = chaveServiceV2;
         this.contaServiceV2 = contaServiceV2;
     }
-
     @Transactional
     public CadastroChavePixResponse criarChaveComConta(CadastroChavePixRequest body) {
         resgatarTipoValidacao(body.getTipoChave())
@@ -54,12 +52,10 @@ public class ChavePixV2Business {
 
         return new CadastroChavePixResponse(chaveServiceV2.save(chave).getId());
     }
-
     private ContaModelV2 validarRegistroConta(CadastroChavePixRequest body) {
         return contaServiceV2.buscarContaPorNumeroContaENumeroAgencia(body.getNumeroConta(), body.getNumeroAgencia())
                 .orElseGet(() -> (ContaModelV2) contaServiceV2.save(ContaV2Mapper.of(body)));
     }
-
     private void resgatarQuantidadeChavePorConta(String numeroConta, String numeroAgencia, TipoPessoaEnum tipoPessoa) {
         Optional<ContaModelV2> contaModelV2 = contaServiceV2.buscarContaPorNumeroContaENumeroAgencia(numeroConta, numeroAgencia);
 
@@ -69,7 +65,6 @@ public class ChavePixV2Business {
             }
         }
     }
-
     public ChavePixResponse inativarChavePix(String id) {
         ChaveModelV2 chave = (ChaveModelV2) chaveServiceV2
                 .findById(id);
@@ -84,7 +79,6 @@ public class ChavePixV2Business {
 
         return ChaveMapper.of((ChaveModelV2) chaveServiceV2.update(id, chave), conta);
     }
-
     public List<ContaResponseV2> buscarChaves(Example<ChaveModelV2> exampleChave, Example<ContaModelV2> exampleConta) {
         List<ChaveModelV2> chaves = filtrarIntervalosDatas(chaveServiceV2.buscarTudo(exampleChave), exampleChave.getProbe());
         List<ContaModelV2> contas = contaServiceV2.buscarTudo(exampleConta);
@@ -99,8 +93,6 @@ public class ChavePixV2Business {
         }
         return resultado;
     }
-
-
     @Transactional
     public ContaResponseV2 atualizarChavePix(String id, AtualizarChavePixRequest body) {
         resgatarTipoValidacao(body.getTipoChave())

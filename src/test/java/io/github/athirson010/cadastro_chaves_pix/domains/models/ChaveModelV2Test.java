@@ -22,7 +22,6 @@ class ChaveModelV2Test {
 
         List<ChaveModelV2> chaves = Collections.singletonList(chave);
 
-
         ChaveModelV2 filtro = ChaveModelV2.builder()
                 .dataInclusao(LocalDateTime.now())
                 .build();
