@@ -8,6 +8,7 @@ import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.CadastroC
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.FiltroChavePixRequest;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.CadastroChavePixResponse;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.ChavePixResponse;
+import io.github.athirson010.cadastro_chaves_pix.domains.enums.StatusChaveEnum;
 import io.github.athirson010.cadastro_chaves_pix.domains.enums.TipoChaveEnum;
 import io.github.athirson010.cadastro_chaves_pix.domains.enums.TipoContaEnum;
 import io.github.athirson010.cadastro_chaves_pix.domains.mappers.ChaveMapper;
@@ -151,6 +152,7 @@ class ChavesPixControllerTest {
 
         ChaveModel filtro = new ChaveModel();
         filtro.setNomeCorrentista("John Doe");
+        filtro.setStatus(StatusChaveEnum.ATIVA);
 
         Example<ChaveModel> example = Example.of(filtro,
                 ExampleMatcher.matchingAll()
