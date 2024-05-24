@@ -5,6 +5,11 @@
 ### HPA (Horizontal pod autoscaling)
 
 ![Fluxograma](docs/desenho-arquitetura.png)
+<div align="center">
+
+![Fluxograma](docs/api-gateway-proxy-reverso-lb.png)
+
+</div>
 
 # Perguntas do case:
 
