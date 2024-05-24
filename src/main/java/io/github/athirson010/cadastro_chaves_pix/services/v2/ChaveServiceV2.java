@@ -21,7 +21,7 @@ public class ChaveServiceV2 extends AbstractService {
     }
 
     public Optional<ChaveModelV2> buscarChavePorValorChave(String chave) {
-        return repository.findByValorChaveAndStatus(chave, StatusChaveEnum.ATIVA);
+        return repository.findByValorChaveAndStatus(chave, StatusChaveEnum.A);
     }
 
     public List<ChaveModelV2> buscarTudo(Example<ChaveModelV2> example) {
@@ -29,6 +29,6 @@ public class ChaveServiceV2 extends AbstractService {
     }
 
     public int buscarQuantidadeChavesAtivasPorConta(String contaId) {
-        return repository.countByContaIdAndStatus(contaId, StatusChaveEnum.ATIVA);
+        return repository.countByContaIdAndStatus(contaId, StatusChaveEnum.A);
     }
 }

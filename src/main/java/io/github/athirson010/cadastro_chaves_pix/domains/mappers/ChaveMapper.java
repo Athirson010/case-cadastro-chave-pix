@@ -20,7 +20,7 @@ public class ChaveMapper {
                 .tipoPessoa(request.getTipoPessoa())
                 .valorChave(request.getValorChave())
                 .tipoConta(request.getTipoConta())
-                .status(StatusChaveEnum.ATIVA)
+                .status(StatusChaveEnum.A)
                 .dataInclusao(LocalDateTime.now())
                 .tipoChave(request.getTipoChave())
                 .build();
@@ -46,7 +46,7 @@ public class ChaveMapper {
         chave.setId(request.getId());
         chave.setDataInclusao(request.getDataInclusao() != null ? request.getDataInclusao().atStartOfDay() : null);
         chave.setDataInativacao(request.getDataInativacao() != null ? request.getDataInativacao().atStartOfDay() : null);
-        chave.setStatus(request.getDataInativacao() != null ? StatusChaveEnum.INATIVA : StatusChaveEnum.ATIVA);
+        chave.setStatus(request.getDataInativacao() != null ? StatusChaveEnum.I : StatusChaveEnum.A);
         chave.setNomeCorrentista(request.getNomeCorrentista());
         chave.setNumeroConta(request.getConta());
         chave.setNumeroAgencia(request.getAgencia());

@@ -26,9 +26,9 @@ class ChaveServiceTest {
     void testBuscarChavePorValorChaveAtiva() {
         String valorChave = "12345678909";
 
-        chaveModel.setStatus(StatusChaveEnum.ATIVA);
+        chaveModel.setStatus(StatusChaveEnum.A);
 
-        when(repository.findByValorChaveAndStatus(valorChave, StatusChaveEnum.ATIVA))
+        when(repository.findByValorChaveAndStatus(valorChave, StatusChaveEnum.A))
                 .thenReturn(Optional.of(chaveModel));
 
         Optional<ChaveModel> result = service.buscarChavePorValorChave(valorChave);
@@ -40,7 +40,7 @@ class ChaveServiceTest {
 
         String valorChave = "12345678909";
 
-        when(repository.findByValorChaveAndStatus(valorChave, StatusChaveEnum.ATIVA)).thenReturn(Optional.empty());
+        when(repository.findByValorChaveAndStatus(valorChave, StatusChaveEnum.A)).thenReturn(Optional.empty());
 
         Optional<ChaveModel> result = service.buscarChavePorValorChave(valorChave);
         assertEquals(Optional.empty(), result);
@@ -52,7 +52,7 @@ class ChaveServiceTest {
         String numeroAgencia = "67890";
         int expectedCount = 5;
 
-        when(repository.countByNumeroContaAndNumeroAgenciaAndStatus(numeroConta, numeroAgencia, StatusChaveEnum.ATIVA))
+        when(repository.countByNumeroContaAndNumeroAgenciaAndStatus(numeroConta, numeroAgencia, StatusChaveEnum.A))
                 .thenReturn(expectedCount);
 
         int result = service.buscarQuantidadeChavesAtivasPorNumeroContaENumeroAgencia(numeroConta, numeroAgencia);

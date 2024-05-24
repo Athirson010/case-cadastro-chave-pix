@@ -86,7 +86,7 @@ class ChavePixBusinessTest {
         when(chaveServiceMock.findById(anyString()))
                 .thenReturn(chaveModel);
 
-        chaveModel.setStatus(StatusChaveEnum.INATIVA);
+        chaveModel.setStatus(StatusChaveEnum.I);
 
         ValidacaoException exception = assertThrows(ValidacaoException.class,
                 () -> chavePixBusiness.inativarChavePix(ID));
@@ -150,7 +150,7 @@ class ChavePixBusinessTest {
 
     @Test
     void testAtualizarChave() {
-        chaveModel.setStatus(StatusChaveEnum.ATIVA);
+        chaveModel.setStatus(StatusChaveEnum.A);
 
         when(chaveServiceMock.findById(any()))
                 .thenReturn(chaveModel);

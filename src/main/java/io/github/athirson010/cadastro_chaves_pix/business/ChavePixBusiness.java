@@ -17,7 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 import java.time.LocalDateTime;
 import java.util.List;
 
-import static io.github.athirson010.cadastro_chaves_pix.domains.enums.StatusChaveEnum.INATIVA;
+import static io.github.athirson010.cadastro_chaves_pix.domains.enums.StatusChaveEnum.I;
 import static io.github.athirson010.cadastro_chaves_pix.domains.models.ChaveModel.filtrarIntervalosDatas;
 import static io.github.athirson010.cadastro_chaves_pix.utils.validacoes.ValidacaoChave.resgatarTipoValidacao;
 
@@ -53,11 +53,11 @@ public class ChavePixBusiness {
         ChaveModel chave = (ChaveModel) chaveService
                 .findById(id);
 
-        if (chave.getStatus().equals(INATIVA)) {
+        if (chave.getStatus().equals(I)) {
             throw new ValidacaoException("Chave ja inativa");
         }
         chave.setDataInativacao(LocalDateTime.now());
-        chave.setStatus(INATIVA);
+        chave.setStatus(I);
         return ChaveMapper.of((ChaveModel) chaveService.update(id, chave));
     }
 
@@ -77,7 +77,7 @@ public class ChavePixBusiness {
 
     public ChaveModel atualizar(String id, AtualizarChavePixRequest request) {
         ChaveModel chave = (ChaveModel) chaveService.findById(id);
-        if (chave.getStatus().equals(INATIVA)) {
+        if (chave.getStatus().equals(I)) {
             throw new ValidacaoException("Não é permitido atualizar chaves inativas");
         }
         return (ChaveModel) chaveService.update(id, ChaveMapper.of(request));

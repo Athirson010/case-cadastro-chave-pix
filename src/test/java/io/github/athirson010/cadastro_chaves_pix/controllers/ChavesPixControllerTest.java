@@ -152,7 +152,7 @@ class ChavesPixControllerTest {
 
         ChaveModel filtro = new ChaveModel();
         filtro.setNomeCorrentista("John Doe");
-        filtro.setStatus(StatusChaveEnum.ATIVA);
+        filtro.setStatus(StatusChaveEnum.A);
 
         Example<ChaveModel> example = Example.of(filtro,
                 ExampleMatcher.matchingAll()

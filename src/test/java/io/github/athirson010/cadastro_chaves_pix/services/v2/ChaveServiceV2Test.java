@@ -28,9 +28,9 @@ class ChaveServiceV2Test {
     @Test
     void testBuscarChavePorValorChaveAtiva() {
         String valorChave = "12345678909";
-        chaveModel.setStatus(StatusChaveEnum.ATIVA);
+        chaveModel.setStatus(StatusChaveEnum.A);
 
-        when(repository.findByValorChaveAndStatus(valorChave, StatusChaveEnum.ATIVA))
+        when(repository.findByValorChaveAndStatus(valorChave, StatusChaveEnum.A))
                 .thenReturn(Optional.of(chaveModel));
 
         Optional<ChaveModelV2> result = service.buscarChavePorValorChave(valorChave);
@@ -41,7 +41,7 @@ class ChaveServiceV2Test {
     void testBuscarChavePorValorChaveInativa() {
         String valorChave = "12345678909";
 
-        when(repository.findByValorChaveAndStatus(valorChave, StatusChaveEnum.ATIVA))
+        when(repository.findByValorChaveAndStatus(valorChave, StatusChaveEnum.A))
                 .thenReturn(Optional.empty());
 
         Optional<ChaveModelV2> result = service.buscarChavePorValorChave(valorChave);
