@@ -44,7 +44,7 @@ public class ChaveModel extends AbstractModel {
                     .filter(chave -> chave.getDataInclusao() != null &&
                             !chave.getDataInclusao().isBefore(inclusaoComeco) &&
                             !chave.getDataInclusao().isAfter(inclusaoFinal))
-                    .collect(Collectors.toList());
+                    .toList();
         }
 
         if (filtro.getDataInativacao() != null) {
@@ -55,7 +55,7 @@ public class ChaveModel extends AbstractModel {
                     .filter(chave -> chave.getDataInativacao() != null &&
                             !chave.getDataInativacao().isBefore(inativacaoComeco) &&
                             !chave.getDataInativacao().isAfter(inativacaoFinal))
-                    .collect(Collectors.toList());
+                    .toList();
         }
         return chaves;
     }

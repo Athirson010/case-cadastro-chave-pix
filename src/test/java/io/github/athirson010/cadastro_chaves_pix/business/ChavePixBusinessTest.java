@@ -56,7 +56,7 @@ class ChavePixBusinessTest {
     }
 
     @Test
-    public void testCriarChaveComConta() {
+     void testCriarChaveComConta() {
         chaveModel.setId(ID);
         when(chaveServiceMock.save(any(ChaveModel.class)))
                 .thenReturn(chaveModel);
@@ -67,7 +67,7 @@ class ChavePixBusinessTest {
     }
 
     @Test
-    public void testCriarChaveComConta_ErroLimiteChaves() {
+     void testCriarChaveComConta_ErroLimiteChaves() {
         chaveModel.setId(ID);
 
         when(chaveServiceMock.buscarQuantidadeChavesAtivasPorNumeroContaENumeroAgencia(any(), any()))

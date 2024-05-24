@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ChaveModelV2Test {
     @Test
-    public void testFiltrarPorDataInclusao() {
+     void testFiltrarPorDataInclusao() {
         ChaveModelV2 chave = ChaveV2Mapper.of(ChaveMassa.cadastroChavePixRequest(),
                 new AbstractModel("1", LocalDate.now()));
 
@@ -33,7 +33,7 @@ class ChaveModelV2Test {
     }
 
     @Test
-    public void testFiltrarPorDataInativacao() {
+     void testFiltrarPorDataInativacao() {
         ChaveModelV2 chave = ChaveV2Mapper.of(ChaveMassa.cadastroChavePixRequest(),
                 new AbstractModel("1", LocalDate.now()));
 
@@ -51,7 +51,7 @@ class ChaveModelV2Test {
     }
 
     @Test
-    public void testSemFiltro() {
+     void testSemFiltro() {
 
         ChaveModelV2 chave = new ChaveModelV2();
 

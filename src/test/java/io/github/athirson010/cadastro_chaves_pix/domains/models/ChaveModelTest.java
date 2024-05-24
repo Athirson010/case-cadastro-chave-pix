@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class ChaveModelTest {
     @Test
-    public void testFiltrarPorDataInclusao() {
+     void testFiltrarPorDataInclusao() {
         ChaveModel chave = ChaveMapper.of(ChaveMassa.cadastroChavePixRequest());
         chave.setDataInclusao(LocalDateTime.now());
 
@@ -29,7 +29,7 @@ class ChaveModelTest {
     }
 
     @Test
-    public void testFiltrarPorDataInativacao() {
+     void testFiltrarPorDataInativacao() {
         ChaveModel chave = ChaveMapper.of(ChaveMassa.cadastroChavePixRequest());
         chave.setDataInativacao(LocalDateTime.now());
 
@@ -45,7 +45,7 @@ class ChaveModelTest {
     }
 
     @Test
-    public void testSemFiltro() {
+     void testSemFiltro() {
 
         ChaveModel chave = new ChaveModel();
 
