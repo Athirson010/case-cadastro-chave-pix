@@ -18,7 +18,7 @@
         <sonar.version>3.9.1.2184</sonar.version>
         <sonar.java.source>17</sonar.java.source>
         <sonar.java.target>17</sonar.java.target>
-        <sonar.host.url>http://localhost:9000</sonar.host.url>
+        <sonar.host.url>http://187.103.57.131.redfoxtelecom.com.br:9000</sonar.host.url>
         <sonar.login>sqa_0155cbdecb4507c3a36dbccb7be37f66fbe5a7e4</sonar.login>
     </properties>
     <dependencies>
