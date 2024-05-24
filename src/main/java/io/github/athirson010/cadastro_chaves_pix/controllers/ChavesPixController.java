@@ -62,8 +62,6 @@ public class ChavesPixController {
 
         ChaveModel filtro = ChaveMapper.of(request);
 
-        filtro.setStatus(ATIVA);
-
         Example<ChaveModel> example = Example.of(filtro,
                 ExampleMatcher.matchingAll()
                         .withStringMatcher(ExampleMatcher.StringMatcher.CONTAINING)

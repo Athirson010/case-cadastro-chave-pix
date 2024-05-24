@@ -58,7 +58,6 @@ public class ChavesPixV2Controller {
         FiltroChavePixRequest.validarFiltro(request);
 
         ChaveModelV2 filtroChave = ChaveV2Mapper.of(request);
-        filtroChave.setStatus(StatusChaveEnum.ATIVA);
         ContaModelV2 filtroConta = ContaV2Mapper.of(request);
 
         Example<ChaveModelV2> exampleChave = Example.of(filtroChave,

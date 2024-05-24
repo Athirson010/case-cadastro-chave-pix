@@ -46,6 +46,7 @@ public class ChaveModel extends AbstractModel {
                             !chave.getDataInclusao().isAfter(inclusaoFinal))
                     .collect(Collectors.toList());
         }
+
         if (filtro.getDataInativacao() != null) {
             LocalDateTime inclusaoComeco = filtro.getDataInativacao();
             LocalDateTime inclusaoFinal = LocalDateTime.of(LocalDate.from(filtro.getDataInativacao()), LocalTime.MAX);
