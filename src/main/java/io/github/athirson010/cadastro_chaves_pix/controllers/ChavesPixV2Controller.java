@@ -7,7 +7,6 @@ import io.github.athirson010.cadastro_chaves_pix.domains.dtos.requests.FiltroCha
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.CadastroChavePixResponse;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.ChavePixResponse;
 import io.github.athirson010.cadastro_chaves_pix.domains.dtos.responses.v2.ContaResponseV2;
-import io.github.athirson010.cadastro_chaves_pix.domains.enums.StatusChaveEnum;
 import io.github.athirson010.cadastro_chaves_pix.domains.mappers.ChaveV2Mapper;
 import io.github.athirson010.cadastro_chaves_pix.domains.mappers.ContaV2Mapper;
 import io.github.athirson010.cadastro_chaves_pix.domains.models.ChaveModelV2;

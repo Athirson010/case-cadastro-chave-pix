@@ -17,8 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static io.github.athirson010.cadastro_chaves_pix.domains.enums.StatusChaveEnum.ATIVA;
-
 @RequestMapping(value = "/v1/chave-pix")
 @Tag(name = "V1")
 @RestController
