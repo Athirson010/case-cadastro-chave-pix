@@ -2,6 +2,8 @@
 
 # Desenho de Arquitetura
 
+### HPA (Horizontal pod autoscaling)
+
 ![Fluxograma](docs/desenho-arquitetura.png)
 
 # Perguntas do case:
