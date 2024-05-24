@@ -43,7 +43,7 @@ public class ChaveModelV2 extends AbstractModel {
             LocalDateTime inativacaoFinal = LocalDateTime.of(LocalDate.from(filtro.getDataInativacao()), LocalTime.MAX);
 
             return chaves.stream()
-                    .filter(chave -> chave.getDataInclusao() != null &&
+                    .filter(chave -> chave.getDataInativacao() != null &&
                             !chave.getDataInativacao().isBefore(inativacaoComeco) &&
                             !chave.getDataInativacao().isAfter(inativacaoFinal))
                     .collect(Collectors.toList());

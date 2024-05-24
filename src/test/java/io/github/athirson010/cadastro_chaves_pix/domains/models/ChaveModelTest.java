@@ -20,7 +20,7 @@ class ChaveModelTest {
         List<ChaveModel> chaves = Collections.singletonList(chave);
 
         ChaveModel filtro = ChaveModel.builder()
-                .dataInclusao(LocalDateTime.now().minusHours(1l))
+                .dataInclusao(LocalDateTime.now().minusHours(5l))
                 .build();
 
         List<ChaveModel> resultado = ChaveModel.filtrarIntervalosDatas(chaves, filtro);
@@ -36,7 +36,7 @@ class ChaveModelTest {
         List<ChaveModel> chaves = List.of(chave);
 
         ChaveModel filtro = ChaveModel.builder()
-                .dataInativacao(LocalDateTime.now().minusHours(1l))
+                .dataInativacao(LocalDateTime.now().minusHours(5l))
                 .build();
 
         List<ChaveModel> resultado = ChaveModel.filtrarIntervalosDatas(chaves, filtro);
