@@ -64,7 +64,7 @@ class ChavePixV2BusinessTest {
     }
 
     @Test
-    void testCriarChaveComConta() {
+     void testCriarChaveComConta() {
         chaveModel.setId(ID);
 
         when(contaServiceMock.buscarContaPorNumeroContaENumeroAgencia(anyString(), anyString()))
@@ -80,7 +80,7 @@ class ChavePixV2BusinessTest {
     }
 
     @Test
-    void testCriarChaveComConta_ErroLimiteChaves() {
+     void testCriarChaveComConta_ErroLimiteChaves() {
         chaveModel.setId(ID);
 
         when(contaServiceMock.findById(anyString()))
