@@ -77,7 +77,7 @@ public class ChavePixBusiness {
 
     public ChaveModel atualizar(String id, AtualizarChavePixRequest request) {
         ChaveModel chave = (ChaveModel) chaveService.findById(id);
-        if (chave.getStatus().equals(INATIVA)){
+        if (chave.getStatus().equals(INATIVA)) {
             throw new ValidacaoException("Não é permitido atualizar chaves inativas");
         }
         return (ChaveModel) chaveService.update(id, ChaveMapper.of(request));
