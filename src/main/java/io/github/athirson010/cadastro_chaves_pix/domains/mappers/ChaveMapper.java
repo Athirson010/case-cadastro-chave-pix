@@ -46,6 +46,7 @@ public class ChaveMapper {
         chave.setId(request.getId());
         chave.setDataInclusao(request.getDataInclusao() != null ? request.getDataInclusao().atStartOfDay() : null);
         chave.setDataInativacao(request.getDataInativacao() != null ? request.getDataInativacao().atStartOfDay() : null);
+        chave.setStatus(request.getDataInativacao() != null  ? StatusChaveEnum.INATIVA : StatusChaveEnum.ATIVA);
         chave.setNomeCorrentista(request.getNomeCorrentista());
         chave.setNumeroConta(request.getConta());
         chave.setNumeroAgencia(request.getAgencia());

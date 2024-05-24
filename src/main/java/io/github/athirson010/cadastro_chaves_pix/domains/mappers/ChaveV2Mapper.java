@@ -29,7 +29,7 @@ public class ChaveV2Mapper {
                 .build();
 
         chaveModelV2.setId(request.getId());
-
+        chaveModelV2.setStatus(chaveModelV2.getDataInativacao() != null ? StatusChaveEnum.INATIVA : StatusChaveEnum.ATIVA);
         return chaveModelV2;
     }
 

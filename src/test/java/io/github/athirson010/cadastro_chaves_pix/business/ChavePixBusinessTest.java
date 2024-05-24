@@ -150,6 +150,10 @@ class ChavePixBusinessTest {
 
     @Test
     void testAtualizarChave() {
+        chaveModel.setStatus(StatusChaveEnum.ATIVA);
+
+        when(chaveServiceMock.findById(any()))
+                .thenReturn(chaveModel);
         when(chaveServiceMock.update(any(), any()))
                 .thenReturn(chaveModel);
         chaveModel.setId(ID);
