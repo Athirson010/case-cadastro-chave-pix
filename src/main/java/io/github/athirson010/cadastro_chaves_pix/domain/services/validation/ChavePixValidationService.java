@@ -6,17 +6,17 @@ import java.util.List;
 
 public class ChavePixValidationService {
     
-    private final List<ChavePixValidationStrategy> strategies;
+    private final List<ChavePixValidationStrategy> estrategias;
 
-    public ChavePixValidationService(List<ChavePixValidationStrategy> strategies) {
-        this.strategies = strategies;
+    public ChavePixValidationService(List<ChavePixValidationStrategy> estrategias) {
+        this.estrategias = estrategias;
     }
 
-    public boolean validate(TipoChaveEnum tipoChave, String valor) {
-        return strategies.stream()
-                .filter(strategy -> strategy.supports(tipoChave))
+    public boolean validar(TipoChaveEnum tipoChave, String valor) {
+        return estrategias.stream()
+                .filter(estrategia -> estrategia.supports(tipoChave))
                 .findFirst()
-                .map(strategy -> strategy.isValid(valor))
+                .map(estrategia -> estrategia.isValid(valor))
                 .orElse(false);
     }
 }

@@ -8,19 +8,19 @@ import io.github.athirson010.cadastro_chaves_pix.domain.valueobjects.ChavePixId;
 
 public class InativarChavePixService implements InativarChavePixUseCase {
 
-    private final ChavePixRepositoryPort chavePixRepository;
+    private final ChavePixRepositoryPort repositorioChavePix;
 
-    public InativarChavePixService(ChavePixRepositoryPort chavePixRepository) {
-        this.chavePixRepository = chavePixRepository;
+    public InativarChavePixService(ChavePixRepositoryPort repositorioChavePix) {
+        this.repositorioChavePix = repositorioChavePix;
     }
 
     @Override
     public void executar(ChavePixId chavePixId) {
-        ChavePix chavePix = chavePixRepository.buscarPorId(chavePixId)
+        ChavePix chavePix = repositorioChavePix.buscarPorId(chavePixId)
                 .orElseThrow(() -> new ChavePixNaoEncontradaException("Chave PIX não encontrada"));
 
         chavePix.inativar();
         
-        chavePixRepository.salvar(chavePix);
+        repositorioChavePix.salvar(chavePix);
     }
 }

@@ -14,41 +14,41 @@ public final class ChavePixWebMapper {
     private ChavePixWebMapper() {
     }
 
-    public static CadastrarChavePixCommand toCommand(CadastrarChavePixRequest request) {
+    public static CadastrarChavePixCommand toCommand(CadastrarChavePixRequest requisicao) {
         return new CadastrarChavePixCommand(
-                request.tipoChave(),
-                request.valorChave(),
-                request.tipoConta(),
-                request.numeroAgencia(),
-                request.numeroConta(),
-                request.nomeCorrentista(),
-                request.tipoPessoa()
+                requisicao.tipoChave(),
+                requisicao.valorChave(),
+                requisicao.tipoConta(),
+                requisicao.numeroAgencia(),
+                requisicao.numeroConta(),
+                requisicao.nomeCorrentista(),
+                requisicao.tipoPessoa()
         );
     }
 
-    public static AtualizarChavePixCommand toCommand(String chavePixId, AtualizarChavePixRequest request) {
+    public static AtualizarChavePixCommand toCommand(String chavePixId, AtualizarChavePixRequest requisicao) {
         return new AtualizarChavePixCommand(
                 chavePixId,
-                request.tipoConta(),
-                request.numeroAgencia(),
-                request.numeroConta(),
-                request.nomeCorrentista(),
-                request.tipoPessoa()
+                requisicao.tipoConta(),
+                requisicao.numeroAgencia(),
+                requisicao.numeroConta(),
+                requisicao.nomeCorrentista(),
+                requisicao.tipoPessoa()
         );
     }
 
-    public static FiltroChavePixQuery toQuery(FiltroChavePixRequest request) {
+    public static FiltroChavePixQuery toQuery(FiltroChavePixRequest requisicao) {
         return new FiltroChavePixQuery(
-                request.chavePixId(),
-                request.tipoChave(),
-                request.numeroAgencia(),
-                request.numeroConta(),
-                request.nomeCorrentista(),
-                request.tipoPessoa(),
-                request.dataInclusaoInicio(),
-                request.dataInclusaoFim(),
-                request.dataInativacaoInicio(),
-                request.dataInativacaoFim()
+                requisicao.chavePixId(),
+                requisicao.tipoChave(),
+                requisicao.numeroAgencia(),
+                requisicao.numeroConta(),
+                requisicao.nomeCorrentista(),
+                requisicao.tipoPessoa(),
+                requisicao.dataInclusaoInicio(),
+                requisicao.dataInclusaoFim(),
+                requisicao.dataInativacaoInicio(),
+                requisicao.dataInativacaoFim()
         );
     }
 

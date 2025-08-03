@@ -7,14 +7,14 @@
 [![MongoDB](https://img.shields.io/badge/MongoDB-4.4+-green.svg)](https://www.mongodb.com/)
 [![Maven](https://img.shields.io/badge/Maven-3.8+-blue.svg)](https://maven.apache.org/)
 
-## Versão 2.0.0 - Hexagonal Architecture Refactor
+## Versão 2.0.0 - Refatoração para Arquitetura Hexagonal
 
 ### 🏗️ Arquitetura
 
-O sistema foi completamente refatorado para implementar **Arquitetura Hexagonal (Ports & Adapters)**, proporcionando:
+O sistema foi completamente refatorado para implementar **Arquitetura Hexagonal (Portas e Adaptadores)**, proporcionando:
 
 - **Separação clara de responsabilidades**
-- **Alta testabilidade**
+- **Alta capacidade de testes**
 - **Baixo acoplamento**
 - **Flexibilidade para mudanças de tecnologia**
 
@@ -91,36 +91,36 @@ src/
 │           └── ValidationConfiguration.java
 ```
 
-### 🎯 Design Patterns Implementados
+### 🎯 Padrões de Projeto Implementados
 
-#### 1. **Hexagonal Architecture (Ports & Adapters)**
+#### 1. **Arquitetura Hexagonal (Portas e Adaptadores)**
 - **Domínio isolado** da infraestrutura
 - **Portas** definem contratos
 - **Adaptadores** implementam detalhes técnicos
 
-#### 2. **Strategy Pattern**
+#### 2. **Padrão Strategy**
 - Validação de chaves PIX por tipo
 - Implementações específicas para CPF, CNPJ, Email, Celular e Aleatória
 
-#### 3. **Factory Pattern**
+#### 3. **Padrão Factory**
 - `ChavePixValidationFactory` para criação de serviços de validação
 - Centralização da criação de objetos complexos
 
-#### 4. **Repository Pattern**
+#### 4. **Padrão Repository**
 - Abstração da camada de persistência
 - Facilita testes e mudanças de tecnologia
 
-#### 5. **Command Pattern**
+#### 5. **Padrão Command**
 - DTOs representam comandos de operações
 - Encapsulamento de parâmetros de operações
 
-#### 6. **Value Object Pattern**
+#### 6. **Padrão Value Object**
 - Objetos imutáveis com validação integrada
 - `ChavePixValue`, `NumeroAgencia`, `NumeroConta`, etc.
 
-#### 7. **Domain Events** (Estrutura preparada)
+#### 7. **Eventos de Domínio** (Estrutura preparada)
 - Base para eventos de domínio futuros
-- Comunicação entre bounded contexts
+- Comunicação entre contextos delimitados
 
 ### 📋 Funcionalidades
 
@@ -190,14 +190,14 @@ mvn jacoco:report
 # Subir MongoDB
 docker-compose up -d
 
-# Build da aplicação
+# Construir a aplicação
 docker build -t cadastro-chaves-pix .
 
 # Executar aplicação
 docker run -p 8080:8080 cadastro-chaves-pix
 ```
 
-### 📖 API Endpoints
+### 📖 Endpoints da API
 
 #### Chaves PIX
 - `POST /api/v1/chaves-pix` - Cadastrar nova chave
@@ -207,14 +207,14 @@ docker run -p 8080:8080 cadastro-chaves-pix
 - `GET /api/v1/chaves-pix` - Listar com filtros
 
 #### Documentação
-- **Swagger UI**: http://localhost:8080/swagger-ui.html
-- **OpenAPI Spec**: http://localhost:8080/v3/api-docs
+- **Interface Swagger**: http://localhost:8080/swagger-ui.html
+- **Especificação OpenAPI**: http://localhost:8080/v3/api-docs
 
 ### 🧪 Testes
 
 #### Estratégia de Testes
 - **Testes Unitários**: Domínio e Aplicação
-- **Testes de Integração**: Adapters
+- **Testes de Integração**: Adaptadores
 - **Testes de Contrato**: APIs
 
 #### Executar Testes
@@ -233,13 +233,26 @@ mvn test jacoco:report
 
 #### Métricas
 - **Actuator**: Endpoints de saúde
-- **Micrometer**: Métricas customizadas
+- **Micrometer**: Métricas personalizadas
 - **Prometheus**: Coleta de métricas
 
 #### Logs
 - **Logback**: Configuração de logs
-- **JSON Format**: Logs estruturados
-- **Correlation ID**: Rastreabilidade
+- **Formato JSON**: Logs estruturados
+- **ID de Correlação**: Rastreabilidade
+
+### 🔄 Histórico de Versões
+
+#### v2.0.0 (2024-XX-XX)
+- ✨ **QUEBRA**: Refatoração completa para Arquitetura Hexagonal
+- ✨ **NOVO**: Implementação de Padrões de Projeto (Strategy, Factory, Repository)
+- ✨ **NOVO**: Objetos de Valor com validação integrada
+- ✨ **NOVO**: Separação clara entre domínio e infraestrutura
+- ✨ **NOVO**: Testes unitários abrangentes
+- ✨ **NOVO**: Tratador Global de Exceções
+- ✨ **NOVO**: Validação robusta por tipo de chave
+- 🐛 **CORREÇÃO**: Validação de CPF e CNPJ com algoritmo correto
+- 📝 **DOCUMENTAÇÃO**: Documentação completa da arquitetura
 
 #### v1.x.x
 - Sistema com arquitetura em camadas tradicional

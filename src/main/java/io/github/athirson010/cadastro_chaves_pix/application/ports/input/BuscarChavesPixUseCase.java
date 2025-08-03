@@ -9,5 +9,5 @@ import java.util.Optional;
 
 public interface BuscarChavesPixUseCase {
     List<ChavePix> buscarComFiltro(FiltroChavePixQuery filtro);
-    Optional<ChavePix> buscarPorId(ChavePixId id);
+    Optional<ChavePix> buscarPorId(ChavePixId identificador);
 }

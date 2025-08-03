@@ -14,65 +14,65 @@ import java.time.LocalDateTime;
 
 public class CadastrarChavePixService implements CadastrarChavePixUseCase {
 
-    private final ChavePixRepositoryPort chavePixRepository;
-    private final ContaRepositoryPort contaRepository;
+    private final ChavePixRepositoryPort repositorioChavePix;
+    private final ContaRepositoryPort repositorioConta;
 
-    public CadastrarChavePixService(ChavePixRepositoryPort chavePixRepository, 
-                                  ContaRepositoryPort contaRepository) {
-        this.chavePixRepository = chavePixRepository;
-        this.contaRepository = contaRepository;
+    public CadastrarChavePixService(ChavePixRepositoryPort repositorioChavePix, 
+                                  ContaRepositoryPort repositorioConta) {
+        this.repositorioChavePix = repositorioChavePix;
+        this.repositorioConta = repositorioConta;
     }
 
     @Override
-    public ChavePix executar(CadastrarChavePixCommand command) {
-        ChavePixValue valorChave = ChavePixValue.of(command.valorChave());
+    public ChavePix executar(CadastrarChavePixCommand comando) {
+        ChavePixValue valorChave = ChavePixValue.of(comando.valorChave());
         
         validarChaveUnica(valorChave);
         
-        Conta conta = obterOuCriarConta(command);
+        Conta conta = obterOuCriarConta(comando);
         
         validarLimiteChaves(conta);
         
         ChavePix chavePix = new ChavePix(
                 ChavePixId.generate(),
                 conta.getId(),
-                command.tipoChave(),
+                comando.tipoChave(),
                 valorChave,
                 LocalDateTime.now()
         );
         
-        return chavePixRepository.salvar(chavePix);
+        return repositorioChavePix.salvar(chavePix);
     }
 
     private void validarChaveUnica(ChavePixValue valorChave) {
-        if (chavePixRepository.existePorValor(valorChave)) {
+        if (repositorioChavePix.existePorValor(valorChave)) {
             throw new ChaveDuplicadaException("Chave PIX já cadastrada");
         }
     }
 
-    private Conta obterOuCriarConta(CadastrarChavePixCommand command) {
-        NumeroAgencia agencia = NumeroAgencia.of(command.numeroAgencia());
-        NumeroConta numeroConta = NumeroConta.of(command.numeroConta());
+    private Conta obterOuCriarConta(CadastrarChavePixCommand comando) {
+        NumeroAgencia agencia = NumeroAgencia.of(comando.numeroAgencia());
+        NumeroConta numeroConta = NumeroConta.of(comando.numeroConta());
         
-        return contaRepository.buscarPorAgenciaEConta(agencia, numeroConta)
-                .orElseGet(() -> criarNovaConta(command, agencia, numeroConta));
+        return repositorioConta.buscarPorAgenciaEConta(agencia, numeroConta)
+                .orElseGet(() -> criarNovaConta(comando, agencia, numeroConta));
     }
 
-    private Conta criarNovaConta(CadastrarChavePixCommand command, 
+    private Conta criarNovaConta(CadastrarChavePixCommand comando, 
                                 NumeroAgencia agencia, NumeroConta numeroConta) {
         Conta novaConta = new Conta(
                 ContaId.generate(),
-                command.tipoConta(),
+                comando.tipoConta(),
                 agencia,
                 numeroConta,
-                command.nomeCorrentista(),
-                command.tipoPessoa()
+                comando.nomeCorrentista(),
+                comando.tipoPessoa()
         );
-        return contaRepository.salvar(novaConta);
+        return repositorioConta.salvar(novaConta);
     }
 
     private void validarLimiteChaves(Conta conta) {
-        long chavesAtivas = chavePixRepository.contarChavesAtivasPorConta(conta.getId());
+        long chavesAtivas = repositorioChavePix.contarChavesAtivasPorConta(conta.getId());
         if (chavesAtivas >= conta.getLimiteChavesPix()) {
             throw new LimiteChavesExcedidoException(
                     String.format("Limite de %d chaves PIX excedido para esta conta", 

@@ -4,5 +4,5 @@ import io.github.athirson010.cadastro_chaves_pix.application.dto.AtualizarChaveP
 import io.github.athirson010.cadastro_chaves_pix.domain.entities.ChavePix;
 
 public interface AtualizarChavePixUseCase {
-    ChavePix executar(AtualizarChavePixCommand command);
+    ChavePix executar(AtualizarChavePixCommand comando);
 }

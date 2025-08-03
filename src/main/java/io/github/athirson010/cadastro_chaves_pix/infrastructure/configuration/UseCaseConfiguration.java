@@ -11,29 +11,29 @@ import org.springframework.context.annotation.Configuration;
 public class UseCaseConfiguration {
 
     @Bean
-    public CadastrarChavePixUseCase cadastrarChavePixUseCase(ChavePixRepositoryPort chavePixRepository,
-                                                           ContaRepositoryPort contaRepository) {
-        return new CadastrarChavePixService(chavePixRepository, contaRepository);
+    public CadastrarChavePixUseCase cadastrarChavePixUseCase(ChavePixRepositoryPort repositorioChavePix,
+                                                           ContaRepositoryPort repositorioConta) {
+        return new CadastrarChavePixService(repositorioChavePix, repositorioConta);
     }
 
     @Bean
-    public AtualizarChavePixUseCase atualizarChavePixUseCase(ChavePixRepositoryPort chavePixRepository,
-                                                           ContaRepositoryPort contaRepository) {
-        return new AtualizarChavePixService(chavePixRepository, contaRepository);
+    public AtualizarChavePixUseCase atualizarChavePixUseCase(ChavePixRepositoryPort repositorioChavePix,
+                                                           ContaRepositoryPort repositorioConta) {
+        return new AtualizarChavePixService(repositorioChavePix, repositorioConta);
     }
 
     @Bean
-    public InativarChavePixUseCase inativarChavePixUseCase(ChavePixRepositoryPort chavePixRepository) {
-        return new InativarChavePixService(chavePixRepository);
+    public InativarChavePixUseCase inativarChavePixUseCase(ChavePixRepositoryPort repositorioChavePix) {
+        return new InativarChavePixService(repositorioChavePix);
     }
 
     @Bean
-    public BuscarChavesPixUseCase buscarChavesPixUseCase(ChavePixRepositoryPort chavePixRepository) {
-        return new BuscarChavesPixService(chavePixRepository);
+    public BuscarChavesPixUseCase buscarChavesPixUseCase(ChavePixRepositoryPort repositorioChavePix) {
+        return new BuscarChavesPixService(repositorioChavePix);
     }
 
     @Bean
-    public CadastrarContaUseCase cadastrarContaUseCase(ContaRepositoryPort contaRepository) {
-        return new CadastrarContaService(contaRepository);
+    public CadastrarContaUseCase cadastrarContaUseCase(ContaRepositoryPort repositorioConta) {
+        return new CadastrarContaService(repositorioConta);
     }
 }

@@ -10,31 +10,31 @@ import io.github.athirson010.cadastro_chaves_pix.domain.valueobjects.NumeroConta
 
 public class CadastrarContaService implements CadastrarContaUseCase {
 
-    private final ContaRepositoryPort contaRepository;
+    private final ContaRepositoryPort repositorioConta;
 
-    public CadastrarContaService(ContaRepositoryPort contaRepository) {
-        this.contaRepository = contaRepository;
+    public CadastrarContaService(ContaRepositoryPort repositorioConta) {
+        this.repositorioConta = repositorioConta;
     }
 
     @Override
-    public Conta executar(CadastrarContaCommand command) {
-        NumeroAgencia agencia = NumeroAgencia.of(command.numeroAgencia());
-        NumeroConta numeroConta = NumeroConta.of(command.numeroConta());
+    public Conta executar(CadastrarContaCommand comando) {
+        NumeroAgencia agencia = NumeroAgencia.of(comando.numeroAgencia());
+        NumeroConta numeroConta = NumeroConta.of(comando.numeroConta());
         
-        return contaRepository.buscarPorAgenciaEConta(agencia, numeroConta)
-                .orElseGet(() -> criarNovaConta(command, agencia, numeroConta));
+        return repositorioConta.buscarPorAgenciaEConta(agencia, numeroConta)
+                .orElseGet(() -> criarNovaConta(comando, agencia, numeroConta));
     }
 
-    private Conta criarNovaConta(CadastrarContaCommand command, 
+    private Conta criarNovaConta(CadastrarContaCommand comando, 
                                 NumeroAgencia agencia, NumeroConta numeroConta) {
         Conta novaConta = new Conta(
                 ContaId.generate(),
-                command.tipoConta(),
+                comando.tipoConta(),
                 agencia,
                 numeroConta,
-                command.nomeCorrentista(),
-                command.tipoPessoa()
+                comando.nomeCorrentista(),
+                comando.tipoPessoa()
         );
-        return contaRepository.salvar(novaConta);
+        return repositorioConta.salvar(novaConta);
     }
 }

@@ -11,19 +11,19 @@ import java.util.Optional;
 
 public class BuscarChavesPixService implements BuscarChavesPixUseCase {
 
-    private final ChavePixRepositoryPort chavePixRepository;
+    private final ChavePixRepositoryPort repositorioChavePix;
 
-    public BuscarChavesPixService(ChavePixRepositoryPort chavePixRepository) {
-        this.chavePixRepository = chavePixRepository;
+    public BuscarChavesPixService(ChavePixRepositoryPort repositorioChavePix) {
+        this.repositorioChavePix = repositorioChavePix;
     }
 
     @Override
     public List<ChavePix> buscarComFiltro(FiltroChavePixQuery filtro) {
-        return chavePixRepository.buscarComFiltros(filtro);
+        return repositorioChavePix.buscarComFiltros(filtro);
     }
 
     @Override
-    public Optional<ChavePix> buscarPorId(ChavePixId id) {
-        return chavePixRepository.buscarPorId(id);
+    public Optional<ChavePix> buscarPorId(ChavePixId identificador) {
+        return repositorioChavePix.buscarPorId(identificador);
     }
 }

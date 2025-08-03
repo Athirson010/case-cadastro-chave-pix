@@ -4,5 +4,5 @@ import io.github.athirson010.cadastro_chaves_pix.application.dto.CadastrarContaC
 import io.github.athirson010.cadastro_chaves_pix.domain.entities.Conta;
 
 public interface CadastrarContaUseCase {
-    Conta executar(CadastrarContaCommand command);
+    Conta executar(CadastrarContaCommand comando);
 }

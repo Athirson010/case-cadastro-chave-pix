@@ -23,7 +23,7 @@ public class ChavePixValue {
     }
 
     public boolean isValidForType(TipoChaveEnum tipoChave) {
-        return validationService.validate(tipoChave, value);
+        return validationService.validar(tipoChave, value);
     }
 
     public String getValue() {

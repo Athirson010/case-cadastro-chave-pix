@@ -13,36 +13,36 @@ import io.github.athirson010.cadastro_chaves_pix.domain.valueobjects.NumeroConta
 
 public class AtualizarChavePixService implements AtualizarChavePixUseCase {
 
-    private final ChavePixRepositoryPort chavePixRepository;
-    private final ContaRepositoryPort contaRepository;
+    private final ChavePixRepositoryPort repositorioChavePix;
+    private final ContaRepositoryPort repositorioConta;
 
-    public AtualizarChavePixService(ChavePixRepositoryPort chavePixRepository, 
-                                  ContaRepositoryPort contaRepository) {
-        this.chavePixRepository = chavePixRepository;
-        this.contaRepository = contaRepository;
+    public AtualizarChavePixService(ChavePixRepositoryPort repositorioChavePix, 
+                                  ContaRepositoryPort repositorioConta) {
+        this.repositorioChavePix = repositorioChavePix;
+        this.repositorioConta = repositorioConta;
     }
 
     @Override
-    public ChavePix executar(AtualizarChavePixCommand command) {
-        ChavePixId chavePixId = ChavePixId.of(command.chavePixId());
+    public ChavePix executar(AtualizarChavePixCommand comando) {
+        ChavePixId chavePixId = ChavePixId.of(comando.chavePixId());
         
-        ChavePix chavePix = chavePixRepository.buscarPorId(chavePixId)
+        ChavePix chavePix = repositorioChavePix.buscarPorId(chavePixId)
                 .orElseThrow(() -> new ChavePixNaoEncontradaException("Chave PIX não encontrada"));
 
         if (!chavePix.isAtiva()) {
             throw new IllegalStateException("Não é possível atualizar uma chave PIX inativa");
         }
         
-        Conta contaAtualizada = obterOuCriarConta(command);
+        Conta contaAtualizada = obterOuCriarConta(comando);
         
-        return chavePixRepository.salvar(chavePix);
+        return repositorioChavePix.salvar(chavePix);
     }
 
-    private Conta obterOuCriarConta(AtualizarChavePixCommand command) {
-        NumeroAgencia agencia = NumeroAgencia.of(command.numeroAgencia());
-        NumeroConta numeroConta = NumeroConta.of(command.numeroConta());
+    private Conta obterOuCriarConta(AtualizarChavePixCommand comando) {
+        NumeroAgencia agencia = NumeroAgencia.of(comando.numeroAgencia());
+        NumeroConta numeroConta = NumeroConta.of(comando.numeroConta());
         
-        return contaRepository.buscarPorAgenciaEConta(agencia, numeroConta)
+        return repositorioConta.buscarPorAgenciaEConta(agencia, numeroConta)
                 .orElseThrow(() -> new IllegalArgumentException("Conta não encontrada"));
     }
 }

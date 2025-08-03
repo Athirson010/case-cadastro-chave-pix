@@ -4,5 +4,5 @@ import io.github.athirson010.cadastro_chaves_pix.application.dto.CadastrarChaveP
 import io.github.athirson010.cadastro_chaves_pix.domain.entities.ChavePix;
 
 public interface CadastrarChavePixUseCase {
-    ChavePix executar(CadastrarChavePixCommand command);
+    ChavePix executar(CadastrarChavePixCommand comando);
 }

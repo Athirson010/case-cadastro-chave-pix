@@ -12,7 +12,7 @@ import java.util.List;
 public class ValidationConfiguration {
 
     @Bean
-    public List<ChavePixValidationStrategy> chavePixValidationStrategies() {
+    public List<ChavePixValidationStrategy> estrategiasValidacaoChavePix() {
         return List.of(
                 new CpfValidationStrategy(),
                 new CnpjValidationStrategy(),
@@ -23,7 +23,7 @@ public class ValidationConfiguration {
     }
 
     @Bean
-    public ChavePixValidationService chavePixValidationService(List<ChavePixValidationStrategy> strategies) {
-        return new ChavePixValidationService(strategies);
+    public ChavePixValidationService servicoValidacaoChavePix(List<ChavePixValidationStrategy> estrategias) {
+        return new ChavePixValidationService(estrategias);
     }
 }
