@@ -6,6 +6,7 @@ import io.github.athirson010.cadastro_chaves_pix.application.ports.input.Cadastr
 import io.github.athirson010.cadastro_chaves_pix.application.ports.input.InativarChavePixUseCase;
 import io.github.athirson010.cadastro_chaves_pix.domain.entities.ChavePix;
 import io.github.athirson010.cadastro_chaves_pix.domain.valueobjects.ChavePixId;
+import io.github.athirson010.cadastro_chaves_pix.domain.services.validation.ChavePixValidationService;
 import io.github.athirson010.cadastro_chaves_pix.infrastructure.adapters.input.web.dto.requests.AtualizarChavePixRequest;
 import io.github.athirson010.cadastro_chaves_pix.infrastructure.adapters.input.web.dto.requests.CadastrarChavePixRequest;
 import io.github.athirson010.cadastro_chaves_pix.infrastructure.adapters.input.web.dto.requests.FiltroChavePixRequest;
@@ -28,19 +29,26 @@ public class ChavePixController {
     private final AtualizarChavePixUseCase casoDeUsoAtualizarChavePix;
     private final InativarChavePixUseCase casoDeUsoInativarChavePix;
     private final BuscarChavesPixUseCase casoDeUsoBuscarChavesPix;
+    private final ChavePixValidationService chavePixValidationService;
 
     public ChavePixController(CadastrarChavePixUseCase casoDeUsoCadastrarChavePix,
                              AtualizarChavePixUseCase casoDeUsoAtualizarChavePix,
                              InativarChavePixUseCase casoDeUsoInativarChavePix,
-                             BuscarChavesPixUseCase casoDeUsoBuscarChavesPix) {
+                             BuscarChavesPixUseCase casoDeUsoBuscarChavesPix,
+                             ChavePixValidationService chavePixValidationService) {
         this.casoDeUsoCadastrarChavePix = casoDeUsoCadastrarChavePix;
         this.casoDeUsoAtualizarChavePix = casoDeUsoAtualizarChavePix;
         this.casoDeUsoInativarChavePix = casoDeUsoInativarChavePix;
         this.casoDeUsoBuscarChavesPix = casoDeUsoBuscarChavesPix;
+        this.chavePixValidationService = chavePixValidationService;
     }
 
     @PostMapping
     public ResponseEntity<ChavePixResponse> cadastrar(@Valid @RequestBody CadastrarChavePixRequest requisicao) {
+        if (!chavePixValidationService.validar(requisicao.tipoChave(), requisicao.valorChave())) {
+            throw new IllegalArgumentException("Valor da chave PIX inválido para o tipo informado");
+        }
+        
         ChavePix chavePix = casoDeUsoCadastrarChavePix.executar(ChavePixWebMapper.toCommand(requisicao));
         ChavePixResponse resposta = ChavePixWebMapper.toResponse(chavePix);
         return new ResponseEntity<>(resposta, HttpStatus.CREATED);
