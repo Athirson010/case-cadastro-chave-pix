@@ -241,19 +241,6 @@ mvn test jacoco:report
 - **JSON Format**: Logs estruturados
 - **Correlation ID**: Rastreabilidade
 
-### 🔄 Changelog
-
-#### v2.0.0 (2024-XX-XX)
-- ✨ **BREAKING**: Refatoração completa para Arquitetura Hexagonal
-- ✨ **NEW**: Implementação de Design Patterns (Strategy, Factory, Repository)
-- ✨ **NEW**: Value Objects com validação integrada
-- ✨ **NEW**: Separação clara entre domínio e infraestrutura
-- ✨ **NEW**: Testes unitários abrangentes
-- ✨ **NEW**: Global Exception Handler
-- ✨ **NEW**: Validação robusta por tipo de chave
-- 🐛 **FIX**: Validação de CPF e CNPJ com algoritmo correto
-- 📝 **DOCS**: Documentação completa da arquitetura
-
 #### v1.x.x
 - Sistema com arquitetura em camadas tradicional
 - Funcionalidades básicas de CRUD
