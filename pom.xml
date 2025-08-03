@@ -18,8 +18,6 @@
         <sonar.version>3.9.1.2184</sonar.version>
         <sonar.java.source>17</sonar.java.source>
         <sonar.java.target>17</sonar.java.target>
-        <sonar.host.url>http://187.103.57.131.redfoxtelecom.com.br:9000</sonar.host.url>
-        <sonar.login>sqa_0155cbdecb4507c3a36dbccb7be37f66fbe5a7e4</sonar.login>
     </properties>
     <dependencies>
         <dependency>
@@ -124,19 +122,19 @@
                     </execution>
                 </executions>
             </plugin>
-            <plugin>
-                <groupId>org.sonarsource.scanner.maven</groupId>
-                <artifactId>sonar-maven-plugin</artifactId>
-                <version>${sonar.version}</version>
-                <executions>
-                    <execution>
-                        <goals>
-                            <goal>sonar</goal>
-                        </goals>
-                        <phase>package</phase>
-                    </execution>
-                </executions>
-            </plugin>
+<!--            <plugin>-->
+<!--                <groupId>org.sonarsource.scanner.maven</groupId>-->
+<!--                <artifactId>sonar-maven-plugin</artifactId>-->
+<!--                <version>${sonar.version}</version>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <goals>-->
+<!--                            <goal>sonar</goal>-->
+<!--                        </goals>-->
+<!--                        <phase>package</phase>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
         </plugins>
         <finalName>cadastro-de-chaves-pix-service</finalName>
     </build>
