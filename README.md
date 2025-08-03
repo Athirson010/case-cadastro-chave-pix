@@ -1,6 +1,278 @@
+# Sistema de Cadastro de Chaves PIX
+
 ![Fluxograma](docs/itau-app.png)
 
-# Desenho de Arquitetura
+[![Java](https://img.shields.io/badge/Java-17-orange.svg)](https://openjdk.java.net/projects/jdk/17/)
+[![Spring Boot](https://img.shields.io/badge/Spring%20Boot-3.2.5-brightgreen.svg)](https://spring.io/projects/spring-boot)
+[![MongoDB](https://img.shields.io/badge/MongoDB-4.4+-green.svg)](https://www.mongodb.com/)
+[![Maven](https://img.shields.io/badge/Maven-3.8+-blue.svg)](https://maven.apache.org/)
+
+## Versão 2.0.0 - Hexagonal Architecture Refactor
+
+### 🏗️ Arquitetura
+
+O sistema foi completamente refatorado para implementar **Arquitetura Hexagonal (Ports & Adapters)**, proporcionando:
+
+- **Separação clara de responsabilidades**
+- **Alta testabilidade**
+- **Baixo acoplamento**
+- **Flexibilidade para mudanças de tecnologia**
+
+#### Estrutura do Projeto
+
+```
+src/
+├── main/java/io/github/athirson010/cadastro_chaves_pix/
+│   ├── domain/                           # Camada de Domínio (Core)
+│   │   ├── entities/                     # Entidades de Negócio
+│   │   │   ├── ChavePix.java
+│   │   │   └── Conta.java
+│   │   ├── valueobjects/                 # Objetos de Valor
+│   │   │   ├── ChavePixId.java
+│   │   │   ├── ContaId.java
+│   │   │   ├── ChavePixValue.java
+│   │   │   ├── NumeroAgencia.java
+│   │   │   └── NumeroConta.java
+│   │   ├── enums/                        # Enumerações
+│   │   │   ├── StatusChaveEnum.java
+│   │   │   ├── TipoChaveEnum.java
+│   │   │   ├── TipoContaEnum.java
+│   │   │   └── TipoPessoaEnum.java
+│   │   ├── exceptions/                   # Exceções de Domínio
+│   │   │   ├── ChaveDuplicadaException.java
+│   │   │   ├── ChavePixNaoEncontradaException.java
+│   │   │   └── LimiteChavesExcedidoException.java
+│   │   └── services/                     # Serviços de Domínio
+│   │       ├── validation/
+│   │       │   ├── ChavePixValidationStrategy.java
+│   │       │   ├── ChavePixValidationService.java
+│   │       │   └── strategies/
+│   │       └── factory/
+│   │           └── ChavePixValidationFactory.java
+│   ├── application/                      # Camada de Aplicação
+│   │   ├── ports/
+│   │   │   ├── input/                    # Portas de Entrada (Use Cases)
+│   │   │   │   ├── CadastrarChavePixUseCase.java
+│   │   │   │   ├── AtualizarChavePixUseCase.java
+│   │   │   │   ├── InativarChavePixUseCase.java
+│   │   │   │   ├── BuscarChavesPixUseCase.java
+│   │   │   │   └── CadastrarContaUseCase.java
+│   │   │   └── output/                   # Portas de Saída
+│   │   │       ├── ChavePixRepositoryPort.java
+│   │   │       └── ContaRepositoryPort.java
+│   │   ├── services/                     # Implementação dos Use Cases
+│   │   │   ├── CadastrarChavePixService.java
+│   │   │   ├── AtualizarChavePixService.java
+│   │   │   ├── InativarChavePixService.java
+│   │   │   ├── BuscarChavesPixService.java
+│   │   │   └── CadastrarContaService.java
+│   │   └── dto/                          # Data Transfer Objects
+│   │       ├── CadastrarChavePixCommand.java
+│   │       ├── AtualizarChavePixCommand.java
+│   │       ├── CadastrarContaCommand.java
+│   │       └── FiltroChavePixQuery.java
+│   └── infrastructure/                   # Camada de Infraestrutura
+│       ├── adapters/
+│       │   ├── input/                    # Adaptadores de Entrada
+│       │   │   └── web/
+│       │   │       ├── controllers/
+│       │   │       ├── dto/
+│       │   │       ├── mappers/
+│       │   │       └── exception/
+│       │   └── output/                   # Adaptadores de Saída
+│       │       └── persistence/
+│       │           └── mongodb/
+│       │               ├── entities/
+│       │               ├── repositories/
+│       │               ├── adapters/
+│       │               └── mappers/
+│       └── configuration/                # Configurações
+│           ├── UseCaseConfiguration.java
+│           └── ValidationConfiguration.java
+```
+
+### 🎯 Design Patterns Implementados
+
+#### 1. **Hexagonal Architecture (Ports & Adapters)**
+- **Domínio isolado** da infraestrutura
+- **Portas** definem contratos
+- **Adaptadores** implementam detalhes técnicos
+
+#### 2. **Strategy Pattern**
+- Validação de chaves PIX por tipo
+- Implementações específicas para CPF, CNPJ, Email, Celular e Aleatória
+
+#### 3. **Factory Pattern**
+- `ChavePixValidationFactory` para criação de serviços de validação
+- Centralização da criação de objetos complexos
+
+#### 4. **Repository Pattern**
+- Abstração da camada de persistência
+- Facilita testes e mudanças de tecnologia
+
+#### 5. **Command Pattern**
+- DTOs representam comandos de operações
+- Encapsulamento de parâmetros de operações
+
+#### 6. **Value Object Pattern**
+- Objetos imutáveis com validação integrada
+- `ChavePixValue`, `NumeroAgencia`, `NumeroConta`, etc.
+
+#### 7. **Domain Events** (Estrutura preparada)
+- Base para eventos de domínio futuros
+- Comunicação entre bounded contexts
+
+### 📋 Funcionalidades
+
+#### Gestão de Chaves PIX
+- ✅ **Cadastro** de novas chaves PIX
+- ✅ **Atualização** de dados da conta
+- ✅ **Inativação** de chaves
+- ✅ **Consulta** com filtros avançados
+- ✅ **Validação** por tipo de chave
+
+#### Tipos de Chave Suportados
+- 📧 **Email**: Validação de formato
+- 📱 **Celular**: Formato internacional (+5511999999999)
+- 🆔 **CPF**: Validação com dígitos verificadores
+- 🏢 **CNPJ**: Validação com dígitos verificadores
+- 🎲 **Aleatória**: UUID formato (xxxxxxxx-xxxx-xxxx-xxxx-xxxxxxxxxxxx)
+
+#### Regras de Negócio
+- **Pessoa Física**: Máximo 5 chaves PIX
+- **Pessoa Jurídica**: Máximo 20 chaves PIX
+- **Unicidade**: Cada chave PIX deve ser única no sistema
+- **Validação**: Formato específico por tipo de chave
+
+### 🔧 Tecnologias
+
+#### Core
+- **Java 17**: Linguagem de programação
+- **Spring Boot 3.2.5**: Framework principal
+- **Spring Data MongoDB**: Persistência
+- **Spring Validation**: Validação de entrada
+
+#### Qualidade
+- **JUnit 5**: Testes unitários
+- **Mockito**: Mocks para testes
+- **Jacoco**: Cobertura de testes
+- **SonarQube**: Qualidade de código
+
+#### Documentação
+- **SpringDoc OpenAPI**: Documentação da API
+- **Swagger UI**: Interface para testes
+
+### 🚀 Como Executar
+
+#### Pré-requisitos
+- Java 17+
+- Maven 3.8+
+- MongoDB 4.4+
+- Docker (opcional)
+
+#### Executando com Maven
+```bash
+# Instalar dependências
+mvn clean install
+
+# Executar aplicação
+mvn spring-boot:run
+
+# Executar testes
+mvn test
+
+# Gerar relatório de cobertura
+mvn jacoco:report
+```
+
+#### Executando com Docker
+```bash
+# Subir MongoDB
+docker-compose up -d
+
+# Build da aplicação
+docker build -t cadastro-chaves-pix .
+
+# Executar aplicação
+docker run -p 8080:8080 cadastro-chaves-pix
+```
+
+### 📖 API Endpoints
+
+#### Chaves PIX
+- `POST /api/v1/chaves-pix` - Cadastrar nova chave
+- `PUT /api/v1/chaves-pix/{id}` - Atualizar chave
+- `DELETE /api/v1/chaves-pix/{id}` - Inativar chave
+- `GET /api/v1/chaves-pix/{id}` - Buscar por ID
+- `GET /api/v1/chaves-pix` - Listar com filtros
+
+#### Documentação
+- **Swagger UI**: http://localhost:8080/swagger-ui.html
+- **OpenAPI Spec**: http://localhost:8080/v3/api-docs
+
+### 🧪 Testes
+
+#### Estratégia de Testes
+- **Testes Unitários**: Domínio e Aplicação
+- **Testes de Integração**: Adapters
+- **Testes de Contrato**: APIs
+
+#### Executar Testes
+```bash
+# Todos os testes
+mvn test
+
+# Testes específicos
+mvn test -Dtest=ChavePixTest
+
+# Com cobertura
+mvn test jacoco:report
+```
+
+### 📊 Monitoramento e Observabilidade
+
+#### Métricas
+- **Actuator**: Endpoints de saúde
+- **Micrometer**: Métricas customizadas
+- **Prometheus**: Coleta de métricas
+
+#### Logs
+- **Logback**: Configuração de logs
+- **JSON Format**: Logs estruturados
+- **Correlation ID**: Rastreabilidade
+
+### 🔄 Changelog
+
+#### v2.0.0 (2024-XX-XX)
+- ✨ **BREAKING**: Refatoração completa para Arquitetura Hexagonal
+- ✨ **NEW**: Implementação de Design Patterns (Strategy, Factory, Repository)
+- ✨ **NEW**: Value Objects com validação integrada
+- ✨ **NEW**: Separação clara entre domínio e infraestrutura
+- ✨ **NEW**: Testes unitários abrangentes
+- ✨ **NEW**: Global Exception Handler
+- ✨ **NEW**: Validação robusta por tipo de chave
+- 🐛 **FIX**: Validação de CPF e CNPJ com algoritmo correto
+- 📝 **DOCS**: Documentação completa da arquitetura
+
+#### v1.x.x
+- Sistema com arquitetura em camadas tradicional
+- Funcionalidades básicas de CRUD
+
+### 🤝 Contribuição
+
+1. Fork o projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/nova-feature`)
+3. Commit suas mudanças (`git commit -am 'Adiciona nova feature'`)
+4. Push para a branch (`git push origin feature/nova-feature`)
+5. Abra um Pull Request
+
+### 📄 Licença
+
+Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
+
+---
+
+## Desenho de Arquitetura Original
 
 ### HPA (Horizontal pod autoscaling)
 
