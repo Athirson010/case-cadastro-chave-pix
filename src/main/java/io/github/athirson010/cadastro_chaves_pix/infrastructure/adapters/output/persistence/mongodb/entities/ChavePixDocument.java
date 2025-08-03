@@ -12,18 +12,18 @@ public class ChavePixDocument {
     @Id
     private String id;
     private String contaId;
-    private TipoChaveEnum tipoChave;
+    private String tipoChave;
     private String valorChave;
     private LocalDateTime dataInclusao;
     private LocalDateTime dataInativacao;
-    private StatusChaveEnum status;
+    private String status;
 
     public ChavePixDocument() {
     }
 
-    public ChavePixDocument(String id, String contaId, TipoChaveEnum tipoChave, 
+    public ChavePixDocument(String id, String contaId, String tipoChave,
                            String valorChave, LocalDateTime dataInclusao, 
-                           LocalDateTime dataInativacao, StatusChaveEnum status) {
+                           LocalDateTime dataInativacao, String status) {
         this.id = id;
         this.contaId = contaId;
         this.tipoChave = tipoChave;
@@ -49,12 +49,12 @@ public class ChavePixDocument {
         this.contaId = contaId;
     }
 
-    public TipoChaveEnum getTipoChave() {
+    public String getTipoChave() {
         return tipoChave;
     }
 
     public void setTipoChave(TipoChaveEnum tipoChave) {
-        this.tipoChave = tipoChave;
+        this.tipoChave = tipoChave.name();
     }
 
     public String getValorChave() {
@@ -81,11 +81,11 @@ public class ChavePixDocument {
         this.dataInativacao = dataInativacao;
     }
 
-    public StatusChaveEnum getStatus() {
+    public String getStatus() {
         return status;
     }
 
     public void setStatus(StatusChaveEnum status) {
-        this.status = status;
+        this.status = status.name();
     }
 }

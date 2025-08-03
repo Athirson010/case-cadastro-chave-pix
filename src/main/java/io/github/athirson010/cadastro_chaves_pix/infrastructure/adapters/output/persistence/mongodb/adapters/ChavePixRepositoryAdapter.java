@@ -2,12 +2,13 @@ package io.github.athirson010.cadastro_chaves_pix.infrastructure.adapters.output
 
 import io.github.athirson010.cadastro_chaves_pix.application.ports.output.ChavePixRepositoryPort;
 import io.github.athirson010.cadastro_chaves_pix.domain.entities.ChavePix;
+import io.github.athirson010.cadastro_chaves_pix.domain.enums.StatusChaveEnum;
 import io.github.athirson010.cadastro_chaves_pix.domain.valueobjects.ChavePixId;
 import io.github.athirson010.cadastro_chaves_pix.domain.valueobjects.ChavePixValue;
 import io.github.athirson010.cadastro_chaves_pix.domain.valueobjects.ContaId;
 import io.github.athirson010.cadastro_chaves_pix.infrastructure.adapters.output.persistence.mongodb.entities.ChavePixDocument;
 import io.github.athirson010.cadastro_chaves_pix.infrastructure.adapters.output.persistence.mongodb.mappers.ChavePixDocumentMapper;
-import io.github.athirson010.cadastro_chaves_pix.infrastructure.adapters.output.persistence.mongodb.repositories.SpringDataChavePixRepository;
+import io.github.athirson010.cadastro_chaves_pix.infrastructure.adapters.output.persistence.mongodb.repositories.ChavePixRepository;
 import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Component;
@@ -19,9 +20,9 @@ import java.util.stream.Collectors;
 @Component
 public class ChavePixRepositoryAdapter implements ChavePixRepositoryPort {
 
-    private final SpringDataChavePixRepository springDataRepository;
+    private final ChavePixRepository springDataRepository;
 
-    public ChavePixRepositoryAdapter(SpringDataChavePixRepository springDataRepository) {
+    public ChavePixRepositoryAdapter(ChavePixRepository springDataRepository) {
         this.springDataRepository = springDataRepository;
     }
 
@@ -76,7 +77,7 @@ public class ChavePixRepositoryAdapter implements ChavePixRepositoryPort {
 
     @Override
     public long contarChavesAtivasPorConta(ContaId contaId) {
-        return springDataRepository.countByContaIdAndStatusAtiva(contaId.getValue());
+        return springDataRepository.countByContaIdAndStatus(contaId.getValue(), StatusChaveEnum.ATIVA.name());
     }
 
     @Override

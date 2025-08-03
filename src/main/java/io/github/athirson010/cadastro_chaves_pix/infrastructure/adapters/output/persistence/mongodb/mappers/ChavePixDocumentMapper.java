@@ -1,6 +1,8 @@
 package io.github.athirson010.cadastro_chaves_pix.infrastructure.adapters.output.persistence.mongodb.mappers;
 
 import io.github.athirson010.cadastro_chaves_pix.domain.entities.ChavePix;
+import io.github.athirson010.cadastro_chaves_pix.domain.enums.StatusChaveEnum;
+import io.github.athirson010.cadastro_chaves_pix.domain.enums.TipoChaveEnum;
 import io.github.athirson010.cadastro_chaves_pix.domain.valueobjects.ChavePixId;
 import io.github.athirson010.cadastro_chaves_pix.domain.valueobjects.ChavePixValue;
 import io.github.athirson010.cadastro_chaves_pix.domain.valueobjects.ContaId;
@@ -15,11 +17,11 @@ public final class ChavePixDocumentMapper {
         return new ChavePixDocument(
                 chavePix.getId().getValue(),
                 chavePix.getContaId().getValue(),
-                chavePix.getTipoChave(),
+                chavePix.getTipoChave().name(),
                 chavePix.getValorChave().getValue(),
                 chavePix.getDataInclusao(),
                 chavePix.getDataInativacao(),
-                chavePix.getStatus()
+                chavePix.getStatus().name()
         );
     }
 
@@ -27,11 +29,11 @@ public final class ChavePixDocumentMapper {
         return new ChavePix(
                 ChavePixId.of(document.getId()),
                 ContaId.of(document.getContaId()),
-                document.getTipoChave(),
+                TipoChaveEnum.valueOf(document.getTipoChave()),
                 ChavePixValue.of(document.getValorChave()),
                 document.getDataInclusao(),
                 document.getDataInativacao(),
-                document.getStatus()
+                StatusChaveEnum.valueOf(document.getStatus())
         );
     }
 }

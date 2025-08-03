@@ -8,8 +8,7 @@ import org.springframework.stereotype.Repository;
 import java.util.Optional;
 
 @Repository
-public interface SpringDataContaRepository extends MongoRepository<ContaDocument, String> {
-    
-    @Query("{ 'numeroAgencia': ?0, 'numeroConta': ?1 }")
+public interface ContaRepository extends MongoRepository<ContaDocument, String> {
+
     Optional<ContaDocument> findByNumeroAgenciaAndNumeroConta(String numeroAgencia, String numeroConta);
 }

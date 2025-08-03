@@ -10,17 +10,15 @@ import java.util.List;
 import java.util.Optional;
 
 @Repository
-public interface SpringDataChavePixRepository extends MongoRepository<ChavePixDocument, String> {
+public interface ChavePixRepository extends MongoRepository<ChavePixDocument, String> {
     
     Optional<ChavePixDocument> findByValorChave(String valorChave);
     
     List<ChavePixDocument> findByContaId(String contaId);
-    
-    @Query("{ 'contaId': ?0, 'status': ?1 }")
+
     List<ChavePixDocument> findByContaIdAndStatus(String contaId, StatusChaveEnum status);
+
+    Long countByContaIdAndStatus(String contaId, String status);
     
-    @Query("{ 'contaId': ?0, 'status': 'ATIVA' }")
-    long countByContaIdAndStatusAtiva(String contaId);
-    
-    boolean existsByValorChave(String valorChave);
+    Boolean existsByValorChave(String valorChave);
 }

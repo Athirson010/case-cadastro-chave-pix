@@ -7,7 +7,7 @@ import io.github.athirson010.cadastro_chaves_pix.domain.valueobjects.NumeroAgenc
 import io.github.athirson010.cadastro_chaves_pix.domain.valueobjects.NumeroConta;
 import io.github.athirson010.cadastro_chaves_pix.infrastructure.adapters.output.persistence.mongodb.entities.ContaDocument;
 import io.github.athirson010.cadastro_chaves_pix.infrastructure.adapters.output.persistence.mongodb.mappers.ContaDocumentMapper;
-import io.github.athirson010.cadastro_chaves_pix.infrastructure.adapters.output.persistence.mongodb.repositories.SpringDataContaRepository;
+import io.github.athirson010.cadastro_chaves_pix.infrastructure.adapters.output.persistence.mongodb.repositories.ContaRepository;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -15,9 +15,9 @@ import java.util.Optional;
 @Component
 public class ContaRepositoryAdapter implements ContaRepositoryPort {
 
-    private final SpringDataContaRepository springDataRepository;
+    private final ContaRepository springDataRepository;
 
-    public ContaRepositoryAdapter(SpringDataContaRepository springDataRepository) {
+    public ContaRepositoryAdapter(ContaRepository springDataRepository) {
         this.springDataRepository = springDataRepository;
     }
 
